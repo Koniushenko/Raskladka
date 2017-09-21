@@ -1,0 +1,20 @@
+<table cellpadding='10' cellspacing='10' border="1px" width='100%'>
+	<thead>
+		<tr>
+			<th ng-repeat='day in days'>{{day}}</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td ng-repeat='breakfast in breakfasts track by $index' >{{breakfast}}</td>
+		</tr>
+		<tr>
+			<td ng-repeat='lunch in lunches track by $index'>{{lunch}}</td>
+		</tr>
+		<tr>
+			<td ng-repeat='dinner in dinners track by $index'>{{dinner}}</td>
+		</tr>
+	</tbody>
+</table>
+
+<!-- <button type="button" class="btn btn-primary" ng-click='showDaysMenuCtrl.arrangeMenu()'>Распределить по дням!</button> -->

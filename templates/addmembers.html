@@ -1,0 +1,76 @@
+
+<show-trip></show-trip>
+
+<a ui-sref="menuSelect">Вернуться к выбору меню</a>
+<input type="submit" value="Дальше" ng-disabled="memCtrl.isTimeOut() || memCtrl.isDoubleName()" ng-click='memCtrl.submit()' 
+ui-sref='addEquipment'>	
+<br>
+
+<form name='regMem' novalidate>
+<table cellpadding="10" border="1" width="80%" >
+<caption> Участники</caption>
+<tr>
+	<th>Имя участника</th> <th>Телефон</th> <th>Пол</th> <th>Ест/пьет все</th> <th>Исключения</th><th>Сохранить!</th>
+</tr>
+
+<tr ng-repeat='member in memCtrl.members'> 
+
+	<td><input type="text" class="form-control"  placeholder = "Участник {{member.number}}"	ng-model = 'member.name' maxlength='20'/></td>	
+	<td><input type="text" class="form-control"   phone-valid placeholder='0XX-XXX-XX-XX' ng-model = 'member.phone'/></td> 
+
+</form>		
+	<td>
+	<form name='sexSelect'> 
+	  <input type="radio" name="gender" value="male" ng-model = 'member.sex'> Male<br>
+	  <input type="radio" name="gender" value="female" ng-model = 'member.sex'> Female
+	</form>
+	</td>
+  
+	<td><input type="checkbox" name="eat" value="true" ng-model = 'member.eat' ng-change='memCtrl.eatAll(member)'/> 
+	<span ng-if='member.eat'>Ем все!</span>
+	<span ng-if='!member.eat'>Не ем:</span>
+	<select multiple size='3' ng-if='!member.eat' ng-model='member.noEat'>
+		<option ng-repeat='product in memCtrl.products' value="{{product}}" >{{product}}
+			
+		</option>
+	</select></td>	
+	<td>{{member.noEat.toString()}}</td>
+	<td> <button type="button" class="btn btn-primary" ng-disabled="regMem.$error.phoneValid || memCtrl.isDoubleName()" 
+	ng-click='memCtrl.saveMemberData(member)'>Записать данные</button></td>	
+</tr>
+</table>
+
+<span ng-if="regMem.$error.phoneValid">Если уж пишешь телефон, то пиши правильно! (0ХХ-ХХХ-ХХ-ХХ)</span>
+<br>
+<span ng-if="memCtrl.isDoubleName()">Одинаковые имена нельзя!</span>
+<br>
+<!-- <button type="button" ng-disabled="memCtrl.isDoubleName()" class="btn btn-primary" ng-click='memCtrl.submit()'>Сохранить</button>
+<br> -->
+
+
+
+
+		
+
+
+<!-- <div ng-repeat='member in memCtrl.members'> 
+Учасник {{member.number}}: {{member.name}} <br>
+Телефон {{member.phone}}<br>
+Пол {{member.sex}}<br>
+Мясо {{member.meat}}<br>
+Спирт {{member.alco}}<br>
+
+</div> -->
+<!-- <span>тел: {{memCtrl.membersInfo[0].phone}}</span>
+<span>Sex {{memCtrl.membersInfo[0].sex}}</span>
+<span>Мясо{{memCtrl.membersInfo[0].meat}}</span>
+<span>Спирт{{memCtrl.membersInfo[0].alco}}</span>
+<br>
+<span>Учасник1: {{memCtrl.members[1].name}}</span>
+<span>тел: {{memCtrl.members[1].phone}}</span>
+<span>Sex {{memCtrl.members[1].sex}}</span>
+<span>Мясо {{memCtrl.members[1].meat}}</span>
+<span>Спирт{{memCtrl.members[1].alco}}</span> -->
+
+
+

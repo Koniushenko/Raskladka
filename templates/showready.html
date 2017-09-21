@@ -1,0 +1,112 @@
+<!-- <div style='float: left'>
+<show-trip ></show-trip>
+<a ui-sref="setProducts">Вернуться назад</a>
+</div> -->
+<show-trip></show-trip>
+<a ui-sref="setProducts" ng-click='showCtrl.rememberExpenses()'>Вернуться назад</a>
+<br>
+<button type="button" class="btn btn-primary" ng-show='showCtrl.admin' ng-click='showCtrl.saveReady()'>СОХРАНИТЬ РАСКЛАДКУ!</button>
+
+<span><b>Общие расходы группы: {{showCtrl.totalExpenses.toFixed(2)}}</b></span>
+<br>
+<span><b>Контроль: {{showCtrl.checkBalances().toFixed(2)}}</b></span>
+<div ng-repeat='member in showCtrl.members track by $index' style="clear: both">
+	<h3>{{member.name}}</h3> <h4>Телефон: {{member.phone}}</h4> <h5>Не ест: {{member.noEat.toString()}}</h5>
+	<ng-form name='memForm'>
+	<table border="1" style="float: left">
+		<thead>
+			<tr>
+				<th colspan="5">Продукты</th>
+			</tr>
+			<tr>
+				<th>Название</th><th>Кол-во</th><th>Вес</th><th>Камент</th><th>Стоимость</th>				
+			</tr>
+			
+		</thead>
+		<tbody>
+			<tr ng-repeat='meal in member.food'>
+				<td>{{meal.name}}</td><td>{{meal.quant.toFixed(2)}} {{meal.measure}}</td><td>{{meal.weight}}</td><td>{{meal.note}}</td>
+				<td><input type='number' placeholder='{{meal.cost}}' ng-model='meal.cost' ng-change='showCtrl.reCalculate(member)' max='9999' min='0' money-valid/></td>
+				
+			</tr>
+			<tr><td colspan="3">Доп. расходы</td>
+			<td><input type='text' placeholder='{{member.addCostNote}}' ng-model='member.addCostNote' maxlength="30"/></td>
+			<td><input type='number' placeholder='{{member.addCost}}' ng-model='member.addCost' ng-change='showCtrl.reCalculate(member)' 
+			max='9999' min='0' money-valid/></td>
+			
+			</tr>
+		</tbody>
+	</table>
+	<table border="1" style="float: left">
+		<thead>
+			<tr>
+				<th colspan="4">В поезд</th>
+			</tr>
+			<tr>
+				<th>Название</th><th>Количество</th><th>Камент</th><th>Стоимость</th>				
+			</tr>
+			
+		</thead>
+		<tbody>
+			<tr ng-repeat='meal in member.trainFood'>
+				<td>{{meal.name}}</td><td>{{meal.quant}} {{meal.measure}}</td><td>{{meal.note}}</td>
+				<td><input type='number' placeholder='{{meal.cost}}' ng-model='meal.cost' ng-change='showCtrl.reCalculate(member)' max='9999' min='0' money-valid/></td>
+				
+			</tr>
+			<!-- <tr><td colspan="2">Доп. расходы</td>
+			<td><input type='number' placeholder='{{member.addCost}}' ng-model='member.addCost' ng-change='showCtrl.reCalculate(member)' 
+			max='9999' min='0' money-valid/></td>
+			<td><input type='text' placeholder='{{member.addCostNote}}' ng-model='member.addCostNote' maxlength="30"/></td>
+			</tr> -->
+		</tbody>
+	</table>
+	<table border="1" style="float:left">
+		<thead>
+			<tr>
+				<th colspan="4">Снаряга</th>
+			</tr>
+			<tr>
+				<th>Название</th><th>Вес</th><th>Камент</th><th>Стоимость</th>
+				
+			</tr>
+		</thead>
+		<tbody>
+			<tr ng-repeat='equip in member.equipment'>
+				<td>{{equip.name}}</td><td>{{equip.weight}}</td><td>{{equip.note}}</td>
+				<td ng-if='!equip.note || equip.note[0] == "О"'><input type='number' placeholder='{{equip.cost}}' ng-model='equip.cost' ng-change='showCtrl.reCalculate(member)' max='9999' min='0' money-valid/></td>
+				<td ng-if='equip.note &&  equip.note[0] == "В"'>{{equip.cost}}</td>
+				
+				
+			</tr>
+		</tbody>
+	</table>
+
+	<!-- </div> -->
+	</ng-form>
+	<div style='float: left'>
+	<p>Общий вес: {{(member.equipWeight + member.foodWeight).toFixed(2)}} кг</p>
+	<p ng-if='member.totalCost'>Общие расходы: {{member.totalCost.toFixed(2)}} грн</p>
+	<p ng-if='member.balance > 0'> Должны {{member.name}}: {{member.balance.toFixed(2)}} грн</p>
+	<p ng-if='member.balance <= 0'> {{member.name}} должен: {{(-member.balance).toFixed(2)}} грн</p>
+	<div ng-messages="memForm.$error" style="color:red" role="alert">
+    <!-- <div ng-message="required">Все поля обязательные!</div> -->
+     <div ng-message="max">{{member.name}}: не более 9999</div>
+     <div ng-message="number">Что-то не то с цифрами</div>
+    <div ng-message="moneyValid">Непохоже на деньги</div>
+    <!-- <div ng-message="pattern">Wrong pattern</div> -->   
+    <div ng-message="min">Расходы не меньше 0!</div>
+    </div>
+    <button type="button" class="btn btn-primary" ng-click='showCtrl.saveExpenses(member, $index)'> Записать расходы {{member.name}}</button>
+	<!-- <p>Снаряга:</p>
+	<ul ng-repeat='equip in member.equipment'>
+		<li>{{equip.name}} {{equip.weight}} {{equip.note}}</li>
+	</ul>
+
+	<p>Еда:</p>
+	<ul ng-repeat='meal in member.food'>
+		<li>{{meal.name}} {{meal.weight}} {{meal.note}}</li>
+	</ul> -->
+	
+</div>
+<br>
+<br>

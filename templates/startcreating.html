@@ -1,0 +1,77 @@
+<!-- DatePicker Widget connection -->
+	<script src="widgets/widgets.js"></script>
+
+<fieldset class="form-group" style='margin-left: 20px'>
+<legend >Новый поход</legend>
+<form name='regForm' novalidate>
+
+		<label for="tripName">Название похода:</label>
+		<input type="text" class="form-control" name="tripName" placeholder="Название похода..."
+		ng-model = 'startCtrl.firstInfo.tripName' ng-maxlength="40" /> 		
+		<span ng-if="(regForm.tripName.$error.minlength || regForm.tripName.$error.required) && regForm.tripName.$touched">
+            Надо бы поинтереснее название, прояви фантазию!
+        </span>		
+		<span ng-if="regForm.tripName.$error.maxlength">
+            Это слишком уж длинное название, надо бы покороче!
+        </span>
+        <br>
+
+
+		<label for="tripDescription">Описание маршрута:</label>
+		<textarea class="form-control" name="tripDescription" placeholder="Нитка маршрута..." rows="10" cols="30"
+		ng-model = 'startCtrl.firstInfo.tripDescription' ng-maxlength="250"></textarea>		
+		<span ng-if="regForm.tripDescription.$error.maxlength">
+		    Это ж не повесть, а нитка маршрута)) Давай покороче!
+		</span>
+        <br>
+
+        <label for="tripDate">Дата отправления:</label>
+		<input id='datepicker' type="text" class="form-control" name="tripDate" placeholder="Когда отправляемся?"
+		ng-model = 'startCtrl.firstInfo.stringDate' date-valid  />
+		<span ng-if="regForm.tripDate.$error.dateValid && regForm.tripDate.$touched">
+            Тыцни в дату на календаре - это ж несложно! Или в формате 2222-12-12
+        </span>	
+		 <br>
+		
+		<label for="tripTime">Время отправления</label>
+		<input type="text" name="tripTime" ng-model='startCtrl.firstInfo.stringTime' placeholder='00:00' time-valid />
+		<span ng-if="regForm.tripTime.$error.timeValid && regForm.tripTime.$touched">
+		    Не тупи, введи время в формате 00:00!
+		</span>
+		<span ng-if="!startCtrl.checkDateTime(startCtrl.firstInfo.stringDate, startCtrl.firstInfo.stringTime) && 
+		regForm.tripTime.$touched && !regForm.tripTime.$error.timeValid">
+		    Ваш поезд уже ушел, придется менять планы!
+		</span>
+		<br>
+
+		<label for="tripMembers">Количество участников</label>
+		<input type="number" name="tripMembers" ng-model='startCtrl.firstInfo.tripMembers' placeholder='2' 
+		max='10' min='2' />
+		<span ng-if="(regForm.tripMembers.$error.max || regForm.tripMembers.$error.min) && regForm.tripMembers.$touched">
+		    Должно быть от 2х до 10 участников!
+		</span>
+		<br>
+
+		<label for="tripNights">Количество ночевок</label>
+		<input type="number" name="tripNights" ng-model='startCtrl.firstInfo.tripNights' placeholder='1' 
+		max='10' min='1' />
+		<span ng-if="(regForm.tripNights.$error.max || regForm.tripNights.$error.min) && regForm.tripNights.$touched">
+		    Должно быть от 1 до 10 ночей!
+		</span>
+		<br>
+
+		<label for="tripPassword">Придумай пароль:</label>
+		<input type="text" class="form-control" name="tripPassword" ng-model = 'startCtrl.firstInfo.tripPassword' ng-maxlength="40"/>	
+		<span ng-if="regForm.tripPassword.$error.maxlength">
+            Это слишком уж длинный пароль, надо бы покороче!
+        </span>
+        <br>
+		<button 
+          ng-disabled="regForm.$invalid || !startCtrl.checkDateTime(startCtrl.firstInfo.stringDate, startCtrl.firstInfo.stringTime)"
+          ng-click="startCtrl.submit()"
+          ui-sref="menuSelect">Готово!
+        </button>
+        
+
+</form>
+</fieldset>

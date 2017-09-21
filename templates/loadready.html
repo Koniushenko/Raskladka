@@ -1,0 +1,25 @@
+<form name='loadForm' novalidate>
+
+		<label for="tripName">Название похода:</label>
+		<input type="text" class="form-control" name="tripName" placeholder="Введите название похода для загрузки из БД"
+		ng-model = 'loadCtrl.tripName' ng-maxlength="50"/>			
+		<span ng-if="loadForm.tripName.$error.maxlength">
+            Это слишком уж длинное название, таких не бывает!
+        </span>        
+        <br>
+
+		<label for="tripPassword">Пароль доступа:</label>
+		<input type="password" class="form-control" name="tripPassword" placeholder="Введите пароль доступа"
+		ng-model = 'loadCtrl.tripPassword' ng-maxlength="50"/>			
+		<span ng-if="loadForm.tripPassword.$error.maxlength">
+            Это слишком уж длинный пароль, таких не бывает!
+        </span>        
+        <br>
+
+
+        <button 
+          ng-disabled="loadForm.$invalid"
+          ng-click="loadCtrl.checkDB()"
+          ui-sref= "setProducts({fromDB: 1})">Загрузить!
+        </button>
+</form>

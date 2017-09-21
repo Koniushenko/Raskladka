@@ -1,0 +1,16 @@
+<span>Название похода:</span> {{showTripCtrl.tripName}}
+<br>
+<span>Дата похода:</span> {{showTripCtrl.stringDate}}
+<br>
+<span>Время выезда:</span> {{showTripCtrl.stringTime}}
+<br>
+<span>Сейчас:</span> {{showTripCtrl.nowDate}}
+<br>
+<span><b>{{showTripCtrl.timeLeft}}</b></span>
+<br>
+<span ng-if='showTripCtrl.timeOut'><a ui-sref="createNew" ng-click='showTripCtrl.refreshTotal()'>Исправьте время и дату выезда!</a></span>
+<br>
+<span>Участники:{{showTripCtrl.tripMembers}}</span>
+<br>
+<span>Ночевки:{{showTripCtrl.tripNights}}</span>
+<br>

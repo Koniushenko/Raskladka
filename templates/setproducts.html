@@ -1,0 +1,113 @@
+<div style='float: left'>
+<show-trip ></show-trip>
+<a ui-sref="addEquipment" ng-click='prodCtrl.refreshTotal()'>Вернуться к снаряжению, меню итд</a>
+</div>
+
+<div style='float: right'>
+<form name='koefficients' novalidate>
+<span>Коэффициент эмансипации:</span><input type='number' ng-model='prodCtrl.emanKoeff' value="0.75" step='0.1' placeholder='0.75' 
+ng-change='prodCtrl.recalcFoodWeight("спирт", 1)' norm-valid max='2'min='0'style='width: 4em'/>
+<br>
+<span>Коэффициент спирта на погоду:</span><input type='number' ng-model='prodCtrl.alcoKoeff' value='1' step='0.1' style='width: 4em'
+placeholder='1.0' norm-valid max='2' min='0' ng-change='prodCtrl.recalcFoodWeight("спирт", 1)'/>
+<br>
+</form>
+<table border="1px">
+	<thead>
+		<tr>
+			<th>Участник</th><th>Вес снаряги</th><th>Вес еды</th><th>Общий вес</th><th>Отклонение</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr ng-repeat='member in prodCtrl.members'>
+			<td>{{member.name}}</td><td>{{(member.equipWeight).toFixed(2)}}</td><td>{{member.foodWeight.toFixed(2)}}</td>
+			<td>{{(member.equipWeight + member.foodWeight).toFixed(2)}}</td>
+			<td>{{( member.equipWeight + member.foodWeight - 
+			prodCtrl.weightPerPerson * ( 1 - (member.sex == 'female')*(1 -  prodCtrl.emanKoeff))).toFixed(3)}}</td>
+		</tr>
+	</tbody>
+</table>
+<span>Общий вес снаряги: {{prodCtrl.equipTotalWeight.toFixed(3)}}</span>
+<br>
+<span>Общий вес еды: {{prodCtrl.foodTotalWeight.toFixed(3)}}</span>
+<br>
+<span ng-if='prodCtrl.males'>Вес на мальчика: {{prodCtrl.weightPerPerson.toFixed(3)}}</span>
+<br>
+<span ng-if='prodCtrl.females'>Вес на девочку: {{ (prodCtrl.weightPerPerson * prodCtrl.emanKoeff).toFixed(3)}}</span>
+</div>
+<button type="button" class="btn btn-primary" ng-click='prodCtrl.spreadAllWeights()' ng-show='prodCtrl.admin' 
+ng-disabled='prodCtrl.zeroMeasureWeight() || manualCorrect.$invalid || koefficients.$invalid'>
+Распределить вес!</button>
+<button type="button" class="btn btn-primary" ng-show='prodCtrl.admin' ng-click='prodCtrl.resetAllWeights()'>Сбросить распределение!</button>
+<!-- <button type="button" class="btn btn-primary" ng-click='prodCtrl.saveAllWeights()' ng-disabled='prodCtrl.berunUndefined()'>
+Сохранить раскладку!</button> -->
+<button type="button" class="btn btn-primary" ng-disabled='prodCtrl.berunUndefined()' ng-click='prodCtrl.saveAllWeights()' 
+ui-sref="showReady">Перейти к расходам</button>
+
+<form name='manualCorrect' novalidate>
+<table border='1px' cellpadding='10p' width='100%'>
+	<thead>
+		<tr>
+			<th>Продукт</th><th>Кол-во</th><th>Вес/ед.</th><th>Общий вес</th><th>Округление</th><th>Камент</th><th>Берун</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr ng-repeat='product in prodCtrl.products'>
+			<td>{{product.name}}</td>
+			<td>{{ (product.quant * (1 + ((product.name == 'спирт') && ((prodCtrl.alcoKoeff || 0) - 1)) )).toFixed(1) }}
+			{{product.measure }}</td>
+			<td><input ng-if='product.measure != "г"' type='number' ng-value='{{product.measWeight}}' ng-model='product.measWeight' 
+			min='0' max='50' ng-change='prodCtrl.recalcFoodWeight(product.name, 1)' norm-valid step='0.1'/>
+			<span ng-if='product.measure == "г"'>{{product.measWeight}}</span></td>
+			<td>{{product.totalWeight.toFixed(3)}}</td>			
+			<td><input type='number' ng-value='{{+product.correctWeight.toFixed(2)}}' ng-model='product.correctWeight' weight-valid min='0' max='50'
+			ng-change='prodCtrl.recalcFoodWeight(product.name, 2)' step='0.1'/></td>
+			<td><input type="text" class="form-control"   placeholder = "Комментарий" ng-model = 'product.note' maxlength='40' /></td>
+			<td><select ng-model='product.berun' ng-change='prodCtrl.recalcFoodWeight(product.name, 3)'>
+				<option ng-repeat='member in prodCtrl.members' value='{{member.number.toString()}}' >{{member.name}}</option>
+			</select></td>
+			
+			
+		</tr>
+	</tbody>
+</table>
+</form>
+<div ng-messages="manualCorrect.$error" style="color:red" role="alert">
+   
+    <div ng-message="weightValid">Формат веса выглядит странно</div>
+    <div ng-message="number">Не цифра вообще ни разу!</div>
+    <div ng-message="normValid">Что-то не то с нормой...</div>
+    <div ng-message="min">Должно быть 0 или больше!</div>
+    <div ng-message="max">Не более 50!</div>
+   
+</div>
+<div ng-messages="koefficients.$error" style="color:red" role="alert">
+   
+    <div ng-message="max">Не более 2.0!</div>
+    <div ng-message="min">Не может быть отрицательным</div>
+    <div ng-message="normValid">Что-то не то с коэффициентами...</div>
+   
+</div>
+<span ng-if='prodCtrl.zeroMeasureWeight()'> Вес ед/изм должен быть больше нуля!</span>
+
+<h2>В ПОЕЗД:</h2>
+
+<form name='trainSpread' novalidate>
+<table border='1px' cellpadding='10p' width='100%'>
+	<thead>
+		<tr>
+			<th>Продукт</th><th>Кол-во</th><th>Камент</th><th>Берун</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr ng-repeat='product in prodCtrl.trainProducts'>
+			<td>{{product.name}}</td>
+			<td>{{product.quant.toFixed(1)}} {{product.measure }}</td>
+			<td><input type="text" class="form-control"   placeholder = "Комментарий" ng-model = 'product.note' maxlength='40' /></td>
+			<td><select ng-model='product.berun' ng-change='prodCtrl.somethingChanged()'>
+				<option ng-repeat='member in prodCtrl.members' value='{{member.number.toString()}}' >{{member.name}}</option>
+			</select></td>			
+		</tr>
+	</tbody>
+</table>
+</form>
