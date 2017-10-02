@@ -14,12 +14,23 @@ function MainController(NewTripService, $scope) {
 	$scope.adminStatus = function() {
 		NewTripService.admin = $scope.admin;
 	}
+
+	$scope.checkUser = function() {
+		NewTripService.admin = $scope.admin = true;
+	}
+
+
+	$scope.adminExit = function() {
+		NewTripService.admin = $scope.admin = false;
+	}
 // Добавили кнопку записи на сервер в любой момент, доступна только админу
 	$scope.saveDataToServer = function() {
+		if (!$scope.admin) return false;
 		NewTripService.saveToServer();
 	}
 
 	$scope.eraseTrip = function() {
+		if (!$scope.admin) return false;
 		NewTripService.eraseTrip();
 	}
 };

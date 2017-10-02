@@ -6,6 +6,13 @@
 	RoutesConfig.$inject = ['$stateProvider', '$urlRouterProvider'];
 	function RoutesConfig($stateProvider, $urlRouterProvider) {
 		$stateProvider
+			.state('home', {
+		    	url: '/',
+		    	templateUrl: 'templates/home.html'
+		    	// controller: 'LoadReadyController',
+		    	// controllerAs: 'loadCtrl'
+
+		    })
 		    .state('loadReady', {
 		    	url: '/load',
 		    	templateUrl: 'templates/loadready.html',
