@@ -63,7 +63,7 @@
       </li>
     </ul>
     <ul class="nav navbar-nav navbar-right">
-      <li><a ng-show='!admin' href="#"><span class="glyphicon glyphicon-user"></span> Зарегиться</a></li>
+      <li><a ng-show='!admin' class='btn' data-toggle="modal" data-target="#signinModal" ><span class="glyphicon glyphicon-user"></span> Зарегиться</a></li>
       <li><a ng-show='admin' class='disabled'><span class="glyphicon glyphicon-ok"></span> Привет, {{login}}</a></li>
       <li><a ng-show='!admin'class='btn' data-toggle="modal" data-target="#loginModal"><span class="glyphicon glyphicon-log-in"></span> Войти</a></li>
       <li><a ng-show='admin' class='btn' data-toggle="modal" data-target="#exitModal"><span class="glyphicon glyphicon-log-out"></span> Выйти</a></li> 
@@ -103,7 +103,8 @@
         
       </div>
       <div class="modal-footer">
-      	<button type="button" class="btn btn-default" ng-disabled="enter.$invalid" ng-click="checkUser()" data-dismiss="modal">
+      	<button type="button" class="btn btn-default" ng-disabled="enter.$invalid" ng-click="checkAdmin(login, password)" 
+      	data-dismiss="modal">
       	Войти</button>
         <button type="button" class="btn btn-default" data-dismiss="modal">Отмена</button>
       </div>
@@ -111,6 +112,48 @@
 
   </div>
 </div>
+
+<div id="signinModal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Введите логин и пароль</h4>
+      </div>
+      
+      <div class="modal-body">
+      	<form name='enter'>
+	      <div class="form-group">	      
+	  	  	<label for="login">Логин:</label>
+	  		<input type="text" class="form-control" id="login" name='login' ng-maxlength="50" ng-model='login'>
+	  		<span ng-if="enter.login.$error.maxlength">
+            Это слишком уж длинный логин, таких не бывает!
+        	</span>        
+		  </div>
+
+		  <div class="form-group">
+		  	<label for="pwd">Пароль:</label>
+		  	<input type="password" class="form-control" id="pwd" name='password' ng-maxlength="50" ng-model='password'>
+		  	<span ng-if="enter.password.$error.maxlength">
+            Это слишком уж длинный пароль, таких не бывает!
+        	</span> 
+		  </div> 
+		</form>
+        
+      </div>
+      <div class="modal-footer">
+      	<button type="button" class="btn btn-default" ng-disabled="enter.$invalid" ng-click="checkUser(login, password)" 
+      	data-dismiss="modal">
+      	Регистрация</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal">Отмена</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
 
 <div id="exitModal" class="modal fade" role="dialog">
   <div class="modal-dialog">
@@ -122,9 +165,10 @@
         <h4 class="modal-title">Точно выйти?</h4>
       </div>
       <div class="modal-body">
-        <button type="button" class="btn btn-default" ng-click='adminExit()' data-dismiss="modal">Да!</button>
+        <p>С выходом из аккаунта ты не сможешь сохранять и удалять текущую раскладку</p>
       </div>
       <div class="modal-footer">
+      	<button type="button" class="btn btn-default" ng-click='adminExit()' data-dismiss="modal">Да!</button>
         <button type="button" class="btn btn-default" data-dismiss="modal">Закрыть</button>
       </div>
     </div>

@@ -270,6 +270,20 @@ function NewTripService($q, $http) {
 			newTrip.females = females;
 	}
 
+	newTrip.checkAdmin = function(login, password, admin) {
+		
+		var promise = $http({
+				method: "POST",
+				data: {
+					'login' : login,
+					'password': password,
+					'admin': admin							
+				},
+				url: "src/checkadmin.php"
+			});
+		return promise;
+	}
+
 	newTrip.eraseTrip = function() {
 
 		var tripPassword = prompt('Введи пароль похода:');

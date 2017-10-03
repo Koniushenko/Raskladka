@@ -15,9 +15,29 @@ function MainController(NewTripService, $scope) {
 		NewTripService.admin = $scope.admin;
 	}
 
-	$scope.checkUser = function() {
-		NewTripService.admin = $scope.admin = true;
+	$scope.checkAdmin = function(login, password) {
+		var promise = NewTripService.checkAdmin(login, password, true);
+		promise.then(function(response) {
+			if (response.data === 'Добро пожаловать! ') 
+				NewTripService.admin = $scope.admin = true;
+			else NewTripService.admin = $scope.admin = false;
+			alert(response.data);			
+		})		 
 	}
+
+	$scope.checkUser = function(login, password) {
+		var promise = NewTripService.checkAdmin(login, password, false);
+		promise.then(function(response) {
+			if (response.data === 'Вы зарегистрировались! ') {
+				NewTripService.admin = $scope.admin = true;
+				alert('Ваш логин: ' + $scope.login + '\nВаш пароль: ' + $scope.password);
+			}
+			else NewTripService.admin = $scope.admin = false;
+			alert(response.data);
+			
+		})		 
+	}
+
 
 
 	$scope.adminExit = function() {
