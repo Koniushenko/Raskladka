@@ -5,10 +5,20 @@
 
 MainController.$inject = ['NewTripService', '$scope'];
 function MainController(NewTripService, $scope) {
-	var mainCtrl = this;
+	// var mainCtrl = this;
+
+	$scope.mainCtrl = this;
+	$scope.mainCtrl.edit = false;
+
 
 	$scope.reset = function() {
+		$scope.mainCtrl.edit = true;
 		NewTripService.resetAll();
+	}
+
+	$scope.noEdit= function() {
+		$scope.mainCtrl.edit = false;
+		// NewTripService.resetAll();
 	}
 
 	$scope.adminStatus = function() {

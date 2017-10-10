@@ -1,17 +1,18 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Туристическая раскладка для чайников 3.0</title>
+	<title>Туристическая раскладка продуктов в поход</title>
 	<meta charset='utf8'>
+	<meta name='description' content='Туристическая раскладка продуктов. Расчет продуктов в поход. Точная калькуляция, автоматическое распределение веса между туристами. Программа подсчитывает продукты в поход, пропорционально распределяет вес, подсчитывает расходы. Буквально за 5 минут можно получить на руки полный список необходимого снаряжения и продуктов. Останется только купить и не забыть взять в поход!'>
 
 	<!-- Bootstrap connection-->
-	<meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
 	
-
+<!-- favicon connection -->
 <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
 <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
@@ -29,20 +30,16 @@
 	<!-- Styles 
 	<link rel="stylesheet" href="css/bootstrap.min.css"> -->
 	<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css">
-	<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.css">
-
-	
- 	
+	<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.css"> 	
 </head>
+
+
 <body ng-app='Raskladka'>
-
-
 <div ng-controller='MainController'>
-
 <nav class="navbar navbar-inverse">
   <div class="container-fluid">
     <div class="navbar-header">
-      <a class="navbar-brand" ui-sref="home"><span class="glyphicon glyphicon-tent"></span> Раскладка 4.0 Beta</a>
+      <a class="navbar-brand" ng-click='noEdit()' ui-sref="home"><span class="glyphicon glyphicon-tent"></span> Раскладка в поход</a>
       <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
@@ -51,7 +48,7 @@
     </div>
     <div class='collapse navbar-collapse' id='myNavbar'>
     <ul class="nav navbar-nav">
-      <li><a ui-sref="loadReady">Загрузить раскладку</a></li>
+      <li><a ng-click='noEdit()'ui-sref="loadReady">Загрузить раскладку</a></li>
       <li><a ng-click='reset()' ui-sref="createNew">Сделать новую</a></li>
       <li ng-disabled='!admin' class='dropdown'>
       	<a class="btn dropdown-toggle" data-toggle='dropdown' ng-disabled='!admin'>Админ
@@ -72,6 +69,15 @@
   </div>
 </nav>
 
+<ul class="nav nav-tabs" ng-show='mainCtrl.edit'>
+  <li ui-sref-active="active"><a ui-sref="createNew">Общая информация</a></li>
+  <li ui-sref-active="active"><a ui-sref="menuSelect">Меню по дням</a></li>
+  <li ui-sref-active="active"><a ui-sref="addMembers">Личная информация</a></li>
+  <li ui-sref-active="active"><a ui-sref="addEquipment">Снаряжение</a></li>
+  <li ui-sref-active="active"><a ui-sref="setProducts">Продукты</a></li>
+  <li ui-sref-active="active"><a ui-sref="showReady">Расходы</a></li>
+</ul>
+
 <div id="loginModal" class="modal fade" role="dialog">
   <div class="modal-dialog">
 
@@ -88,7 +94,7 @@
 	  	  	<label for="login">Логин:</label>
 	  		<input type="text" class="form-control" id="login" name='login' ng-maxlength="50" ng-model='login'>
 	  		<span ng-if="enter.login.$error.maxlength">
-            Это слишком уж длинное название, таких не бывает!
+            Это слишком уж длинный логин, таких не бывает!
         	</span>        
 		  </div>
 
@@ -168,56 +174,27 @@
         <p>С выходом из аккаунта ты не сможешь сохранять и удалять текущую раскладку</p>
       </div>
       <div class="modal-footer">
-      	<button type="button" class="btn btn-default" ng-click='adminExit()' data-dismiss="modal">Да!</button>
-        <button type="button" class="btn btn-default" data-dismiss="modal">Закрыть</button>
+      	<button type="button" class="btn btn-default" ng-click='adminExit()' data-dismiss="modal">Выйти!</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal">Не выходить</button>
       </div>
     </div>
 
   </div>
 </div>
-<!-- <form name='loadForm' novalidate>
-
-		<label for="tripName">Название похода:</label>
-		<input type="text" class="form-control" name="tripName" placeholder="Введите название похода для загрузки из БД"
-		ng-model = 'loadCtrl.tripName' ng-maxlength="50"/>			
-		<span ng-if="loadForm.tripName.$error.maxlength">
-            Это слишком уж длинное название, таких не бывает!
-        </span>        
-        <br>
-
-		<label for="tripPassword">Пароль доступа:</label>
-		<input type="password" class="form-control" name="tripPassword" placeholder="Введите пароль доступа"
-		ng-model = 'loadCtrl.tripPassword' ng-maxlength="50"/>			
-		<span ng-if="loadForm.tripPassword.$error.maxlength">
-            Это слишком уж длинный пароль, таких не бывает!
-        </span>        
-        <br>
-
-
-        <button 
-          ng-disabled="loadForm.$invalid"
-          ng-click="loadCtrl.checkDB()"
-          ui-sref= "setProducts({fromDB: 1})">Загрузить!
-        </button>
-</form>
- -->
-	
-
-<!-- <button type="button" class="btn btn-primary" ng-disabled='!admin' ng-click='saveDataToServer()'>Сохранить все данные</button>
-<button type="button" class="btn btn-primary" ng-disabled='!admin' ng-click='eraseTrip()'>Удалить этот поход из БД</button>
-	<h2> Раскладка для чайников 3.0 - Beta</h2>
-	<a ui-sref="home">home!!!</a></li>
-	<ul>
-		<li><a >Загрузить подготовленную раскладку</a></li>
-		<li><</li>
-	</ul> -->
 	<div class='container'><ui-view></ui-view></div>
 	
 </div>
+
 <footer class="container-fluid text-center">
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
 
 
-	Copyright 2017 by Kokon&Co. All rights reserved!!!
+	<h4><i>Copyright 2017 by Kokon&Co. All rights reserved!!!</i></h1>
 	
 
 </footer>

@@ -4,10 +4,11 @@ angular.module('Raskladka')
 .controller('MenuController', MenuController)
 .directive('showDaysMenu', ShowDaysMenu);
 
-MenuController.$inject = ['NewTripService'];
-function MenuController(NewTripService) {
+MenuController.$inject = ['NewTripService', '$scope'];
+function MenuController(NewTripService, $scope) {
 	var menuCtrl = this;
 
+	$scope.mainCtrl.edit = true;
 	menuCtrl.breakfasts = NewTripService.getMenu('breakfast');
 	menuCtrl.lunches = NewTripService.getMenu('lunch');
 	menuCtrl.dinners = NewTripService.getMenu('dinner');
@@ -77,9 +78,28 @@ function MenuController(NewTripService) {
 		for (var key in menu[number-1].meals) mealsNames.push(menu[number-1].meals[key].name);
 		while (mealsNames.length > 0) {
 			var nextMeal = mealsNames.pop();
-			if (nextMeal && ~mealsNames.indexOf(nextMeal)) return true;
+			if (nextMeal && ~mealsNames.indexOf(nextMeal)) {
+				return true;
+			}
 		}
 		return false;
+	}
+
+	menuCtrl.anyDoubleName = function() {	
+		var anyDouble = false;	
+		anyDouble = menuCtrl.breakfasts.some(function(breakfast) {
+			if (menuCtrl.isDoubleName(menuCtrl.breakfasts, breakfast.number))
+				return true;
+		}) ||
+		menuCtrl.lunches.some(function(lunch) {
+			if (menuCtrl.isDoubleName(menuCtrl.lunches, lunch.number))
+				return true;
+		}) ||
+		menuCtrl.dinners.some(function(dinner) {
+			if (menuCtrl.isDoubleName(menuCtrl.dinners, dinner.number))
+				return true;
+		}) || menuCtrl.isDoubleName(menuCtrl.train, 1)
+		return anyDouble;			
 	}
 
 	menuCtrl.differentMeasures = function() {
@@ -120,15 +140,35 @@ function MenuController(NewTripService) {
 				else productMeasure[product.name] = product.measure;
 			})
 		})
+		if (result) return result;
+		menuCtrl.train.some(function(train, number) {
+			return train.meals.some(function(product, index){
+				if (product.name in productMeasure) {
+					if (productMeasure[product.name] != product.measure) {
+						result = 'поезд' +  product.name + 'поз'+ index;
+						return true;
+					}
+				}
+				else productMeasure[product.name] = product.measure;
+			})
+		})
 	return result;
 	}
 
-	menuCtrl.save = function() {
-		NewTripService.saveMenu(menuCtrl);
-	}
+	// menuCtrl.save = function() {
+	// 	NewTripService.saveMenu(menuCtrl);
+	// }
 
 	menuCtrl.isTimeOut = function() {
 		return NewTripService.timeOut;
+	}
+
+	menuCtrl.formError = function() {
+
+		if ($scope.breakForm.$invalid || $scope.lunchForm.$invalid|| $scope.dinnerForm.$invalid || $scope.trainForm.$invalid 
+			|| menuCtrl.isTimeOut() || menuCtrl.differentMeasures() || menuCtrl.anyDoubleName())
+			NewTripService.errorMenu = true;
+		else NewTripService.errorMenu = false;
 	}
 
 	

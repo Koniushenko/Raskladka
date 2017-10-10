@@ -2,7 +2,6 @@
 	<script src="widgets/widgets.js"></script>
 
 <fieldset class="form-group" style='margin-left: 20px'>
-<legend >Новый поход</legend>
 <form name='regForm' novalidate>
 
 		<label for="tripName">Название похода:</label>
@@ -66,11 +65,11 @@
             Это слишком уж длинный пароль, надо бы покороче!
         </span>
         <br>
-		<button 
+		<!-- <button 
           ng-disabled="regForm.$invalid || !startCtrl.checkDateTime(startCtrl.firstInfo.stringDate, startCtrl.firstInfo.stringTime)"
           ng-click="startCtrl.submit()"
           ui-sref="menuSelect">Готово!
-        </button>
+        </button> -->
         
 
 </form>

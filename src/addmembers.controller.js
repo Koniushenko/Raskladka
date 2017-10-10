@@ -3,9 +3,11 @@
 angular.module('Raskladka')
 .controller('MembersController', MembersController);
 
-MembersController.$inject = ['NewTripService', '$interval'];
-function MembersController(NewTripService, $interval) {
+MembersController.$inject = ['NewTripService', '$interval', '$scope'];
+function MembersController(NewTripService, $interval, $scope) {
 	var memCtrl = this;		
+
+	$scope.mainCtrl.edit = true;
 	NewTripService.checkMembersQuantity();
 	memCtrl.members = NewTripService.getMembersInfo();
 	memCtrl.products = NewTripService.getProductNames();

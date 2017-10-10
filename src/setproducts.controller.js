@@ -4,10 +4,11 @@ angular.module('Raskladka')
 .controller('ProductsController', ProductsController)
 
 
-ProductsController.$inject = ['NewTripService'];
-function ProductsController(NewTripService) {
+ProductsController.$inject = ['NewTripService', '$scope'];
+function ProductsController(NewTripService, $scope) {
 	var prodCtrl = this;
 	prodCtrl.admin = NewTripService.admin;
+	NewTripService.checkMembersQuantity();
 	prodCtrl.products = NewTripService.getProducts(); // пересчитываем продукты, если готовую раскладку не сохраняли
 	prodCtrl.members = NewTripService.getMembersInfo();
 	prodCtrl.trainProducts = NewTripService.trainProducts;
@@ -19,6 +20,7 @@ function ProductsController(NewTripService) {
 	prodCtrl.females = NewTripService.females;
 	prodCtrl.filePath = NewTripService.filePath;
 	
+	$scope.mainCtrl.edit = true;
 	
 	//удаляем нулевые позиции и считаем общий вес
 	for ( product in prodCtrl.products) {

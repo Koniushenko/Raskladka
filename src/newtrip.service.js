@@ -149,6 +149,7 @@ function NewTripService($q, $http) {
 		memberExpenses = [];
 		newTrip.males = 2;
 		newTrip.females = 0;
+		newTrip.errorMenu = false;
 	}
 
 	newTrip.resetAll();	
@@ -379,12 +380,12 @@ function NewTripService($q, $http) {
 	}
 
 	
-	newTrip.saveFirstInfo = function(firstInfo) {
-		tripInfo = firstInfo;
-		// for (var key in tripInfo) tripInfo[key] = firstInfo[key];
-		tripInfo.stringDate = (new Date(tripInfo.stringDate)).toISOString().slice(0,10);
-		newTrip.timeOut = false;
-	}
+	// newTrip.saveFirstInfo = function(firstInfo) {
+	// 	tripInfo = firstInfo;
+	// 	// for (var key in tripInfo) tripInfo[key] = firstInfo[key];
+	// 	tripInfo.stringDate = (new Date(tripInfo.stringDate)).toISOString().slice(0,10);
+	// 	newTrip.timeOut = false;
+	// }
 	
 
 	newTrip.getFirstInfo = function() {
@@ -393,20 +394,41 @@ function NewTripService($q, $http) {
 
 	
 
-	newTrip.saveMembersInfo = function(memInfo) {
-		membersInfo = memInfo;
-	}
+	// newTrip.saveMembersInfo = function(memInfo) {
+	// 	membersInfo = memInfo;
+	// }
 
 	newTrip.getMembersInfo = function() {		
 		return membersInfo;
 	}
 
-	newTrip.saveEquipment = function(equipInfo) {
-		equipmentInfo = equipInfo;
+	// newTrip.saveEquipment = function(equipInfo) {
+	// 	equipmentInfo = equipInfo;
+	// 	membersInfo.forEach(function(member) {member.equipWeight = 0;})
+	// 	equipmentInfo.forEach(function(equip) {
+	// 		var memberNumber = +equip.nesun;
+	// 		membersInfo[memberNumber].equipWeight+=equip.equipWeight;
+	// 	});
+	// 	// if (toServer) newTrip.saveToServer();
+
+	// }
+
+	newTrip.checkEquipment = function() {		
 		membersInfo.forEach(function(member) {member.equipWeight = 0;})
+		var i = 0;			
 		equipmentInfo.forEach(function(equip) {
+			if (!equip.equipName) equip.equipName = 'Снаряжение ' + i;
+			if (!equip.equipWeight) equip.equipWeight = 0.1;
 			var memberNumber = +equip.nesun;
-			membersInfo[memberNumber].equipWeight+=equip.equipWeight;
+			if (memberNumber < membersInfo.length) 
+				membersInfo[memberNumber].equipWeight+=equip.equipWeight;
+			else {
+				membersInfo[0].equipWeight+=equip.equipWeight;
+				equip.nesun = '0';
+			}
+			memberNumber = +equip.berun;
+			if (memberNumber >= membersInfo.length) equip.berun = '0';
+			i++;
 		});
 		// if (toServer) newTrip.saveToServer();
 
@@ -471,14 +493,14 @@ function NewTripService($q, $http) {
 		}		
 	}
 
-	newTrip.saveMenu = function(menuData) {		
+	// newTrip.saveMenu = function(menuData) {		
 
-		breakfasts = menuData.breakfasts;
-		lunches = menuData.lunches;
-		dinners = menuData.dinners;
-		train = menuData.train;
+	// 	breakfasts = menuData.breakfasts;
+	// 	lunches = menuData.lunches;
+	// 	dinners = menuData.dinners;
+	// 	train = menuData.train;
 
-	}
+	// }
 
 	
 	newTrip.arrangeMenu = function(menuData) {	
@@ -544,8 +566,9 @@ function NewTripService($q, $http) {
 	}
 
 	newTrip.getProducts = function() {
-		
+		newTrip.checkMembersQuantity();
 		newTrip.countMalesFemales();
+		newTrip.checkEquipment();
 		var males = newTrip.males;
 		var females = newTrip.females;
 		var noEatProducts = {};
@@ -793,6 +816,7 @@ function NewTripService($q, $http) {
 			  day: 'numeric',
 			  weekday: 'long',
 			  timezone: 'UTC',
+
 			  hour: '2-digit',
 			  minute: 'numeric',
 			  second: 'numeric'
@@ -844,6 +868,39 @@ function NewTripService($q, $http) {
 
 		return message;
 	}
+
+	newTrip.checkDataOK = function() {
+		var deferred = $q.defer();
+
+		if (tripInfo.stringDate && tripInfo.stringTime && tripInfo.tripMembers && tripInfo.tripNights && !newTrip.timeOut &&
+			!newTrip.errorMenu)  {
+			if (!tripInfo.tripName) tripInfo.tripName = 'Безымянный поход';
+			if (!tripInfo.tripDescription) tripInfo.tripDescription = 'Тут могло быть описание похода';		
+			if (!tripInfo.tripDate) tripInfo.tripDate = new Date(tripInfo.stringDate
+			 + 'T' + tripInfo.stringTime + ':00Z');	
+			if (!tripInfo.tripPassword) tripInfo.tripPassword = '';	
+			tripInfo.stringDate = (new Date(tripInfo.stringDate)).toISOString().slice(0,10);
+			newTrip.timeOut = false;
+			newTrip.arrangeMenu({'tripDays': [], 'tripBreakfasts': [], 'tripLunches': [], 'tripDinners': []});
+			deferred.resolve();
+		}
+		else {
+			deferred.reject();
+			alert("Не все поля корректно заполнены!")
+		}
+		return deferred.promise;
+	}
+
+	// 	if (!startCtrl.firstInfo.tripDescription) startCtrl.firstInfo.tripDescription = 'Тут могло быть описание похода';
+		
+	// 	if (!startCtrl.firstInfo.stringDate) startCtrl.firstInfo.stringDate = new Date().toISOString().slice(0,10);
+	// 	if (!startCtrl.firstInfo.stringTime) startCtrl.firstInfo.stringTime = '23:59';	
+	// 	if (!startCtrl.firstInfo.tripDate) startCtrl.firstInfo.tripDate = new Date(startCtrl.firstInfo.stringDate
+	// 	 + 'T' + startCtrl.firstInfo.stringTime + ':00Z');	
+	// 	if (!startCtrl.firstInfo.tripMembers) startCtrl.firstInfo.tripMembers = 2;
+	// 	if (!startCtrl.firstInfo.tripNights) startCtrl.firstInfo.tripNights = 1;	
+	// 	if (!startCtrl.firstInfo.tripPassword) startCtrl.firstInfo.tripPassword = '';
+	// }
 
 }
 	

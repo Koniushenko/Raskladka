@@ -1,0 +1,50 @@
+<div style='clear:left' ng-if='menuCtrl.train.length'>
+<h3> В поезд</h3>
+<br>
+<form name='trForm' novalidate>
+<span ng-if="trainForm.$error.required">Не все заполнено!</span>
+<span ng-if="menuCtrl.differentMeasures()">Один продукт - разные измерения! {{menuCtrl.differentMeasures()}}</span>
+<!-- <ng-form name='trainForm' novalidate> -->
+<div style = 'float: left; padding: 20px'>
+
+<!-- <button type="button" class="btn btn-primary" ng-click='menuCtrl.deleteMenu(menuCtrl.train, 1)'> Удалить поезд</button> -->
+<table border='0' cellspacing="10">
+<thead>
+	<tr>
+		<th>X</th><th>Название</th><th>Муж</th><th>Жен</th><th>Мера</th>
+	</tr>
+</thead>
+<tbody>
+<tr ng-repeat='meal in menuCtrl.train[0].meals track by $index'>
+<!-- <div style='margin: 10px'ng-repeat='meal in breakfast.meals track by $index'> -->
+	<td><input type='checkbox' ng-model = 'menuCtrl.train[0].toDelete[$index]' /></td>
+	<td><input type='text' placeholder='{{meal.name}} новая еда' ng-model='menuCtrl.train[0].meals[$index].name' required maxlength="15" size='10' />
+	</td>
+	<td><input type='number' placeholder='{{meal.maleNorm}}' ng-model='menuCtrl.train[0].meals[$index].maleNorm' 
+	required  norm-valid max='999' min='0' step='1' style='width: 3em'/></td>
+	<td><input type='number' placeholder='{{meal.femaleNorm}}' ng-model='menuCtrl.train[0].meals[$index].femaleNorm' 
+	required norm-valid max='999' min='0' step='1' style='width: 3em' /></td>
+	<td><select name="measure" ng-model='menuCtrl.train[0].meals[$index].measure' required>
+		  <option ng-repeat='measure in menuCtrl.measures' value="{{measure}}">{{measure}}</option>
+	</select></td>
+<!-- </div> -->
+</tr>
+</tbody>
+</table>
+
+<span ng-if="menuCtrl.isDoubleName(menuCtrl.train, 1)">Одинаковые названия нельзя!</span>
+<br>
+<div ng-messages="trainForm.$error" style="color:red" role="alert">
+    <!-- <div ng-message="required">Все поля обязательные!</div> -->
+     <div ng-message="max">Поезд: норма не больше 1000!</div>
+     <div ng-message="number">Что-то не то с нормой...</div>
+    <div ng-message="normValid">Формат нормы выглядит странно</div>
+    <!-- <div ng-message="pattern">Wrong pattern</div> -->   
+    <div ng-message="min">Норма не меньше 0!</div>
+</div>
+<button type="button" ng-disabled='menuCtrl.isDoubleName(menuCtrl.train, 1) || train[0].meals.length > 11'class="btn btn-primary" ng-click='menuCtrl.addMeal(menuCtrl.train, 1)' title="Не более 12">Добавить еду</button>
+<button type="button" class="btn btn-primary" ng-click='menuCtrl.deleteMeals(menuCtrl.train, 1)'>Удалить отмеченные</button>
+</div>
+<!-- </ng-form> -->
+</form>
+</div>

@@ -3,9 +3,12 @@
 angular.module('Raskladka')
 .controller('EquipmentController', EquipmentController);
 
-EquipmentController.$inject = ['NewTripService', '$interval'];
-function EquipmentController(NewTripService, $interval) {
+EquipmentController.$inject = ['NewTripService', '$interval', '$scope'];
+function EquipmentController(NewTripService, $interval, $scope) {
 	var equipCtrl = this;	
+
+	$scope.mainCtrl.edit = true;
+	NewTripService.checkMembersQuantity();
 	equipCtrl.admin =NewTripService.admin
 	equipCtrl.members = NewTripService.getMembersInfo();
 	equipCtrl.equipment = NewTripService.getEquipment();   

@@ -3,10 +3,11 @@ angular.module('Raskladka')
 .controller('ShowReadyController', ShowReadyController)
 
 
-ShowReadyController.$inject = ['NewTripService'];
-function ShowReadyController( NewTripService) {
+ShowReadyController.$inject = ['NewTripService', '$scope'];
+function ShowReadyController( NewTripService, $scope) {
 	var showCtrl = this;
 	
+	$scope.mainCtrl.edit = true;
 	showCtrl.admin = NewTripService.admin;
 	showCtrl.members = NewTripService.getReady();
 	showCtrl.totalExpenses = 0;

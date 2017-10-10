@@ -24,14 +24,24 @@
 		    	url: '/create',
 		    	templateUrl: 'templates/startcreating.html',
 		    	controller: 'StartCreatingController',
-		    	controllerAs: 'startCtrl'
+		    	controllerAs: 'startCtrl',
+		    	resolve: {
+		    		dataOK: ['NewTripService', function(NewTripService) {
+		    			return NewTripService.checkDataOK();
+		    		}]
+		    	}
 
 		    })
 		    .state( 'addMembers', {
 		    	url: '/addmembers',
 		    	templateUrl: 'templates/addmembers.html',
 		    	controller: 'MembersController',
-		    	controllerAs: 'memCtrl',		    	
+		    	controllerAs: 'memCtrl',	
+		    	resolve: {
+		    		dataOK: ['NewTripService', function(NewTripService) {
+		    			return NewTripService.checkDataOK();
+		    		}]
+		    	}	    	
 
 		    })
 		    .state('addEquipment', {
@@ -39,12 +49,22 @@
 		    	templateUrl: 'templates/addequipment.html',
 		    	controller: 'EquipmentController',
 		    	controllerAs: 'equipCtrl',
+		    	resolve: {
+		    		dataOK: ['NewTripService', function(NewTripService) {
+		    			return NewTripService.checkDataOK();
+		    		}]
+		    	}
 		    })
 		    .state('menuSelect', {
 		    	url: '/menuselect',
 		    	templateUrl: 'templates/menuselect.html',
 		    	controller: 'MenuController',
 		    	controllerAs: 'menuCtrl',
+		    	resolve: {
+		    		dataOK: ['NewTripService', function(NewTripService) {
+		    			return NewTripService.checkDataOK();
+		    		}]
+		    	}
 		    })
 		    .state('setProducts', {
 		    	url: '/setproducts/{fromDB}',
@@ -53,7 +73,7 @@
 		    	controllerAs: 'prodCtrl',
 		    	resolve: {
 		    		twoParam: ['$stateParams','NewTripService', function($stateParams, NewTripService) {
-		    			if ($stateParams.fromDB != 1) return;
+		    			if ($stateParams.fromDB != 1) return NewTripService.checkDataOK();
 		    			return NewTripService.loadFromDB();
 		    		}]
 		    	}	
@@ -62,7 +82,12 @@
 		    	url: '/showready',
 		    	templateUrl: 'templates/showready.html',
 		    	controller: 'ShowReadyController',
-		    	controllerAs: 'showCtrl'
+		    	controllerAs: 'showCtrl',
+		    	resolve: {
+		    		dataOK: ['NewTripService', function(NewTripService) {
+		    			return NewTripService.checkDataOK();
+		    		}]
+		    	}
 		    		    	
 		    })
 		    .state('testDB', {
