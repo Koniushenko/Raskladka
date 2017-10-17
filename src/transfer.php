@@ -14,6 +14,7 @@ $tripInfo = json_decode($_POST['tripInfo']);
 if ($tripInfo->tripName === '') echo ("Нет данных для записи!");
 else {
 	$tripName = $tripInfo->tripName;
+	$admin = $tripInfo->admin;
 	try {
 	    $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password,
 		array(
@@ -27,38 +28,43 @@ else {
 	    $arrayID = $stmt->fetchAll(PDO::FETCH_COLUMN, 0);
 
 	    if ( !empty($arrayID)) {
-	    	echo 'Такой поход есть:'.$tripName.' , обновляю...';
 	    	$tripID = $arrayID[0];
-	    	$sql = "UPDATE tripinfo SET tripDescription = '$tripInfo->tripDescription', tripDate = '$tripInfo->tripDate', 
-	    	stringDate = '$tripInfo->stringDate', stringTime = '$tripInfo->stringTime', tripMembers = '$tripInfo->tripMembers', 
-	    	tripNights = '$tripInfo->tripNights', males = '$tripInfo->males', females = '$tripInfo->females', 
-	    	alcoKoeff = '$tripInfo->alcoKoeff', emanKoeff = '$tripInfo->emanKoeff', tripPassword = '$tripInfo->tripPassword' 
-	    	WHERE ID = '$tripID'";
-	    	$conn->exec($sql);
-	    	$last_id = $tripID;
-		    $sql = "DELETE FROM menu WHERE tripID = '$tripID'";
-		    $conn->exec($sql);
-		    $sql = "DELETE FROM products WHERE tripID = '$tripID'";
-		    $conn->exec($sql);
-		    $sql = "DELETE FROM members WHERE tripID = '$tripID'";
-		    $conn->exec($sql);
-		    $sql = "DELETE FROM equipment WHERE tripID = '$tripID'";
-		    $conn->exec($sql);	
-		    $sql = "DELETE FROM measweights WHERE tripID = '$tripID'";
-		    $conn->exec($sql);	
-		    $sql = "DELETE FROM productstotal WHERE tripID = '$tripID'";
-		    $conn->exec($sql);	
-		    $sql = "DELETE FROM traintotal WHERE tripID = '$tripID'";
-		    $conn->exec($sql);	 
-
-	    }
+	    	$stmt = $conn->prepare("SELECT admin FROM tripinfo WHERE tripName='$tripName'");
+		    $stmt->execute();
+		    $arrayAdmin = $stmt->fetchAll(PDO::FETCH_COLUMN, 0);
+		    if ($arrayAdmin[0] == $admin) {
+		    	echo 'Такой поход есть: '.$tripName.' , Админ: '.$admin.' .Обновляю...';		    	
+		    	$sql = "UPDATE tripinfo SET tripDescription = '$tripInfo->tripDescription', tripDate = '$tripInfo->tripDate', 
+		    	stringDate = '$tripInfo->stringDate', stringTime = '$tripInfo->stringTime', tripMembers = '$tripInfo->tripMembers', 
+		    	tripNights = '$tripInfo->tripNights', males = '$tripInfo->males', females = '$tripInfo->females', 
+		    	alcoKoeff = '$tripInfo->alcoKoeff', emanKoeff = '$tripInfo->emanKoeff', tripPassword = '$tripInfo->tripPassword' 
+		    	WHERE ID = '$tripID'";
+		    	$conn->exec($sql);
+		    	$last_id = $tripID;
+			    $sql = "DELETE FROM menu WHERE tripID = '$tripID'";
+			    $conn->exec($sql);
+			    $sql = "DELETE FROM products WHERE tripID = '$tripID'";
+			    $conn->exec($sql);
+			    $sql = "DELETE FROM members WHERE tripID = '$tripID'";
+			    $conn->exec($sql);
+			    $sql = "DELETE FROM equipment WHERE tripID = '$tripID'";
+			    $conn->exec($sql);	
+			    $sql = "DELETE FROM measweights WHERE tripID = '$tripID'";
+			    $conn->exec($sql);	
+			    $sql = "DELETE FROM productstotal WHERE tripID = '$tripID'";
+			    $conn->exec($sql);	
+			    $sql = "DELETE FROM traintotal WHERE tripID = '$tripID'";
+			    $conn->exec($sql);	
+			}
+			else throw new Exception('У похода '.$tripName.' другой админ! Ничего не пишу!');
+		}    
 	    else {	   
-	    	echo 'Записываю новый поход: '.$tripName;
+	    	echo 'Записываю новый поход: '.$tripName.' , Админ: '.$admin ;
 		    $sql = "INSERT INTO tripinfo(tripName, tripDescription, tripDate, stringDate, stringTime, tripMembers, tripNights, 
-		    	males, females, alcoKoeff, emanKoeff, tripPassword)
+		    	males, females, alcoKoeff, emanKoeff, tripPassword, admin)
 		    VALUES('$tripInfo->tripName', '$tripInfo->tripDescription', '$tripInfo->tripDate', '$tripInfo->stringDate', 
 		    '$tripInfo->stringTime', '$tripInfo->tripMembers', '$tripInfo->tripNights', '$tripInfo->males', '$tripInfo->females', 
-		    '$tripInfo->alcoKoeff', '$tripInfo->emanKoeff', '$tripInfo->tripPassword')";
+		    '$tripInfo->alcoKoeff', '$tripInfo->emanKoeff', '$tripInfo->tripPassword', '$tripInfo->admin')";
 			$conn->exec($sql);
 			$last_id = $conn->lastInsertId();			     
 		}
@@ -176,6 +182,10 @@ else {
 	catch(PDOException $e) {
 	    $conn->rollback();
 	    echo "Connection failed: " . $e->getMessage();
+	}
+	catch(Exception $e) {
+		$conn->rollback();
+	    echo $e->getMessage();
 	}
 	$conn = null;
 }

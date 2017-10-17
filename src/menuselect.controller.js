@@ -14,8 +14,33 @@ function MenuController(NewTripService, $scope) {
 	menuCtrl.dinners = NewTripService.getMenu('dinner');
 	menuCtrl.train = NewTripService.getMenu('train');
 	menuCtrl.measures = NewTripService.measures;
+	NewTripService.productState = false; 
+	var allProd = NewTripService.getProducts();
 
-	
+	menuCtrl.newProduct = function() {
+			
+		NewTripService.allBerunsDefined = ! (menuCtrl.breakfasts.some(function(breakfast) {
+			if (breakfast.times == 0) return false;
+			return breakfast.meals.some(function(meal) {
+				return !(meal.name in allProd && allProd[meal.name].berun);					
+			})
+			}) || menuCtrl.lunches.some(function(lunch) {
+				if (lunch.times == 0) return false;
+				return lunch.meals.some(function(meal) {
+					return !(meal.name in allProd && allProd[meal.name].berun);
+				})
+			}) || menuCtrl.dinners.some(function(dinner) {
+				if (dinner.times == 0) return false;
+				return dinner.meals.some(function(meal) {
+					return !(meal.name in allProd && allProd[meal.name].berun);
+				})
+			}) || menuCtrl.train.some(function(train) {
+				return train.meals.some(function(meal) {
+					return !(meal.name in NewTripService.trainProducts && NewTripService.trainProducts[meal.name].berun)						
+			})
+		}) 
+		)		
+	}
 
 	
 	menuCtrl.arrangeMenu = function() {

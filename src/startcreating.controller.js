@@ -6,10 +6,11 @@ StartCreatingController.$inject = ['NewTripService', '$interval', '$scope'];
 function StartCreatingController(NewTripService, $interval, $scope) {
 	var startCtrl = this;
 
-	$scope.mainCtrl.edit = true;
-	startCtrl.firstInfo = NewTripService.getFirstInfo();	
+	$scope.mainCtrl.edit = true;	
+	NewTripService.productState = false; 	
 
 	startCtrl.checkDateTime = function(strDate, strTime) {
+		startCtrl.firstInfo = NewTripService.getFirstInfo();
 		if (!strTime) strTime = '23:59';
 		if (!strDate) strDate = new Date().toISOString().slice(0,10);
 		startCtrl.firstInfo.tripDate = new Date(strDate + 'T' + strTime + ':00Z');

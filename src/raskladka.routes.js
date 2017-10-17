@@ -9,9 +9,6 @@
 			.state('home', {
 		    	url: '/',
 		    	templateUrl: 'templates/home.html'
-		    	// controller: 'LoadReadyController',
-		    	// controllerAs: 'loadCtrl'
-
 		    })
 		    .state('loadReady', {
 		    	url: '/load',
@@ -21,13 +18,14 @@
 
 		    })
 		    .state('createNew', {
-		    	url: '/create',
+		    	url: '/create/{fromDB}',
 		    	templateUrl: 'templates/startcreating.html',
 		    	controller: 'StartCreatingController',
 		    	controllerAs: 'startCtrl',
 		    	resolve: {
-		    		dataOK: ['NewTripService', function(NewTripService) {
-		    			return NewTripService.checkDataOK();
+		    		twoParam: ['$stateParams','NewTripService', function($stateParams, NewTripService) {
+		    			if ($stateParams.fromDB != 1) return NewTripService.checkDataOK();
+		    			return NewTripService.loadFromDB();
 		    		}]
 		    	}
 
@@ -72,11 +70,10 @@
 		    	controller: 'ProductsController',
 		    	controllerAs: 'prodCtrl',
 		    	resolve: {
-		    		twoParam: ['$stateParams','NewTripService', function($stateParams, NewTripService) {
-		    			if ($stateParams.fromDB != 1) return NewTripService.checkDataOK();
-		    			return NewTripService.loadFromDB();
+		    		dataOK: ['NewTripService', function(NewTripService) {
+		    			return NewTripService.checkDataOK();
 		    		}]
-		    	}	
+		    	}
 		    })		    
 		    .state('showReady', {
 		    	url: '/showready',

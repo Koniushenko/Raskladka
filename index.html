@@ -49,7 +49,7 @@
     <div class='collapse navbar-collapse' id='myNavbar'>
     <ul class="nav navbar-nav">
       <li><a ng-click='noEdit()'ui-sref="loadReady">Загрузить раскладку</a></li>
-      <li><a ng-click='reset()' ui-sref="createNew">Сделать новую</a></li>
+      <li><a ng-click='reset()' href="">Сделать новую</a></li>
       <li ng-disabled='!admin' class='dropdown'>
       	<a class="btn dropdown-toggle" data-toggle='dropdown' ng-disabled='!admin'>Админ
       	<span class="caret"></span></a>
@@ -75,8 +75,11 @@
   <li ui-sref-active="active"><a ui-sref="addMembers">Личная информация</a></li>
   <li ui-sref-active="active"><a ui-sref="addEquipment">Снаряжение</a></li>
   <li ui-sref-active="active"><a ui-sref="setProducts">Продукты</a></li>
-  <li ui-sref-active="active"><a ui-sref="showReady">Расходы</a></li>
+  <li ui-sref-active="active"><a class="btn" ng-disabled='!finished' href="" ng-click='goToExpenses()'>Расходы</a></li>
 </ul>
+<br>
+<span ng-if='isFinished()'></span>
+<show-trip ng-show='mainCtrl.edit'></show-trip>
 
 <div id="loginModal" class="modal fade" role="dialog">
   <div class="modal-dialog">
@@ -106,7 +109,7 @@
         	</span> 
 		  </div> 
 		</form>
-        
+         
       </div>
       <div class="modal-footer">
       	<button type="button" class="btn btn-default" ng-disabled="enter.$invalid" ng-click="checkAdmin(login, password)" 

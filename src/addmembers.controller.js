@@ -11,6 +11,7 @@ function MembersController(NewTripService, $interval, $scope) {
 	NewTripService.checkMembersQuantity();
 	memCtrl.members = NewTripService.getMembersInfo();
 	memCtrl.products = NewTripService.getProductNames();
+	NewTripService.productState = false; 
 
 	memCtrl.eatAll = function(member) {
 		member.noEat = [];
@@ -35,31 +36,18 @@ function MembersController(NewTripService, $interval, $scope) {
 		return false;
 	}
 
-	memCtrl.isTimeOut = function() {
-		return NewTripService.timeOut;
-	}	
+	memCtrl.formError = function() {		
+		if ($scope.regMem.$invalid || memCtrl.isDoubleName())
+			NewTripService.errorMembers = true;
+		else NewTripService.errorMembers = false;
+		
+	}
 
+	
 	memCtrl.saveMemberData = function(member) {
 		NewTripService.saveMemberData(member);
 	};
 
-	memCtrl.submit = function() {
-		for (var i=0; i < memCtrl.length; i++) {
-			if (!memCtrl.members[i].name) memCtrl.members[i].name = 'Участник ' + i;
-			if (!memCtrl.members[i].phone) memCtrl.members[i].phone = '000-000-00-00';		
-		}			
-		NewTripService.saveMembersInfo(memCtrl.members);	
-	}
-
-	
-	
 }
-
-
-
-
-
-
-
 	
 })();

@@ -13,8 +13,8 @@
     link: function(scope, elm, attrs, ctrl) {
       ctrl.$validators.timeValid = function(modelValue, viewValue) {
         if (ctrl.$isEmpty(modelValue)) {
-          // consider empty models to be valid
-          return true;
+          // consider empty models NOT to be valid
+          return false;
         }
 
         if (TIME_REGEXP.test(viewValue)) {

@@ -11,16 +11,16 @@ function NewTripService($q, $http) {
 	measWeights, readyRaskladka, memberExpenses;
 
 	newTrip.resetAll = function() {
-		var startDate = new Date();		
+		var startDate = new Date();			
 		tripInfo = {
 		'tripName' : '',
 		'tripDescription' : '',
-		'tripDate' : startDate,
 		'stringDate' : startDate.toISOString().slice(0,10),
 		'stringTime' : '23:59',
 		'tripMembers': 2,
 		'tripNights': 1
 		};
+		tripInfo.tripDate = new Date(tripInfo.stringDate + 'T' + tripInfo.stringTime + ':00Z');	
 		membersInfo = [];
 		equipmentInfo = [];
 		breakfasts = [
@@ -145,13 +145,15 @@ function NewTripService($q, $http) {
 		newTrip.timeOut = false;
 		// newTrip.finished = false;
 		// newTrip.saved = false;
+		newTrip.allBerunsDefined = false;
 		readyRaskladka = [];
 		memberExpenses = [];
 		newTrip.males = 2;
 		newTrip.females = 0;
-		newTrip.errorMenu = false;
+		newTrip.errorMenu = newTrip.errorMembers = newTrip.errorEquip = newTrip.errorProducts = false;
+		// newTrip.currentAdmin = undefined;
 	}
-
+ 
 	newTrip.resetAll();	
 
 
@@ -196,6 +198,7 @@ function NewTripService($q, $http) {
 				equipmentInfo = response.data.equipment;
 				productsTotal = response.data.productsTotal;
 				trainTotal = response.data.trainTotal;
+				// newTrip.savedAdmin = tripInfo.admin;
 				newTrip.alcoKoeff = +tripInfo.alcoKoeff;
 				newTrip.emanKoeff = +tripInfo.emanKoeff;
 				newTrip.males = +tripInfo.males;
@@ -223,6 +226,9 @@ function NewTripService($q, $http) {
 					});
 					memberExpenses.push(memEx); 
 				});
+				newTrip.getProducts();
+				readyRaskladka = [];
+				newTrip.berunUndefined();
 				deferred.resolve(response);
 			});
 		})
@@ -232,8 +238,19 @@ function NewTripService($q, $http) {
 		return deferred.promise;		
 	}
 
-	
-	
+	newTrip.berunUndefined = function(products, trainProducts) {
+		for (var product in products) 
+				if (products[product].berun === undefined) {
+					newTrip.allBerunsDefined = false;
+					return;
+				}
+		for (var product in trainProducts) 
+			if (trainProducts[product].berun === undefined) {
+				newTrip.allBerunsDefined = false;
+				return;
+			}
+		newTrip.allBerunsDefined = true;
+	}
 
 	newTrip.checkMembersQuantity = function() {
 
@@ -293,7 +310,8 @@ function NewTripService($q, $http) {
 			method: "POST",
 			data: {
 				'tripName' : tripInfo.tripName,
-				'tripPassword': tripPassword							
+				'tripPassword': tripPassword,
+				'admin': newTrip.currentAdmin							
 			},
 			url: "src/checkdb.php"
 		})	
@@ -326,6 +344,7 @@ function NewTripService($q, $http) {
 		tripInfo.females = newTrip.females;
 		tripInfo.alcoKoeff = newTrip.alcoKoeff;
 		tripInfo.emanKoeff = newTrip.emanKoeff;	
+		tripInfo.admin = newTrip.currentAdmin;
 		equipmentInfo = newTrip.getEquipment();
 
 		newTrip.arrangeMenu({'tripDays': [], 'tripBreakfasts': [], 'tripLunches': [], 'tripDinners': []});		
@@ -591,6 +610,13 @@ function NewTripService($q, $http) {
 			allProducts['спирт'].correctWeight = Math.round(allProducts['спирт'].totalWeight * 100) / 100;
 
 		}
+
+		for ( var product in allProducts ) 
+			if (allProducts[product].quant == 0) delete allProducts[product];
+		for (product in newTrip.trainProducts)
+			if (newTrip.trainProducts[product].quant == 0) delete newTrip.trainProducts[product];
+		
+		
 		productsTotal.forEach(function (product) {
 			var prodName = product.name;
 			if (prodName in allProducts) {
@@ -873,15 +899,25 @@ function NewTripService($q, $http) {
 		var deferred = $q.defer();
 
 		if (tripInfo.stringDate && tripInfo.stringTime && tripInfo.tripMembers && tripInfo.tripNights && !newTrip.timeOut &&
-			!newTrip.errorMenu)  {
+			!newTrip.errorMenu && !newTrip.errorMembers && !newTrip.errorEquip && !newTrip.errorProducts) {
 			if (!tripInfo.tripName) tripInfo.tripName = 'Безымянный поход';
 			if (!tripInfo.tripDescription) tripInfo.tripDescription = 'Тут могло быть описание похода';		
-			if (!tripInfo.tripDate) tripInfo.tripDate = new Date(tripInfo.stringDate
-			 + 'T' + tripInfo.stringTime + ':00Z');	
+			if (!tripInfo.tripDate) tripInfo.tripDate = new Date(tripInfo.stringDate + 'T' + tripInfo.stringTime + ':00Z');	
 			if (!tripInfo.tripPassword) tripInfo.tripPassword = '';	
-			tripInfo.stringDate = (new Date(tripInfo.stringDate)).toISOString().slice(0,10);
-			newTrip.timeOut = false;
+			// tripInfo.stringDate = (new Date(tripInfo.stringDate)).toISOString().slice(0,10);
 			newTrip.arrangeMenu({'tripDays': [], 'tripBreakfasts': [], 'tripLunches': [], 'tripDinners': []});
+			for (var i=0; i < membersInfo.length; i++) {
+				if (!membersInfo[i].name) membersInfo[i].name = 'Участник ' + i;
+				if (!membersInfo[i].phone) membersInfo[i].phone = '000-000-00-00';		
+			}
+			for (var i = 0; i < equipmentInfo.length; i++) {
+				if (!equipmentInfo[i].equipName) equipmentInfo[i].equipName = 'Снаряжение ' + i;
+				if (!equipmentInfo[i].equipWeight) equipmentInfo[i].equipWeight = 0.1;
+			};
+			if (newTrip.productState) newTrip.refreshProductsTotal();
+			// else newTrip.getProducts();
+			// newTrip.berunUndefined(allProducts, newTrip.trainProducts);
+			if (readyRaskladka.length) newTrip.rememberExpenses(readyRaskladka);
 			deferred.resolve();
 		}
 		else {

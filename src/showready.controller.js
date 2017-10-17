@@ -3,31 +3,9 @@ angular.module('Raskladka')
 .controller('ShowReadyController', ShowReadyController)
 
 
-ShowReadyController.$inject = ['NewTripService', '$scope'];
-function ShowReadyController( NewTripService, $scope) {
+ShowReadyController.$inject = ['NewTripService', '$scope', '$state'];
+function ShowReadyController( NewTripService, $scope, $state) {
 	var showCtrl = this;
-	
-	$scope.mainCtrl.edit = true;
-	showCtrl.admin = NewTripService.admin;
-	showCtrl.members = NewTripService.getReady();
-	showCtrl.totalExpenses = 0;
-	showCtrl.members.forEach( function(member) {
-		showCtrl.totalExpenses += member.totalCost;
-	});
-
-
-	showCtrl.checkBalances = function() {
-		var sum = 0;
-		showCtrl.members.forEach(function(member) {
-			sum += member.balance || 0;
-		})
-		return sum;
-	}
-
-	showCtrl.rememberExpenses = function() {
-		NewTripService.rememberExpenses(showCtrl.members);
-	};
-
 	showCtrl.reCalculate = function(member) {
 
 		showCtrl.totalExpenses -=member.totalCost;
@@ -84,6 +62,45 @@ function ShowReadyController( NewTripService, $scope) {
 		});	
 		
 	}
+	var products = NewTripService.getProducts();
+	var members = NewTripService.getMembersInfo();
+	var train = NewTripService.trainProducts;
+	NewTripService.productState = false; 
+	NewTripService.berunUndefined(products, train);
+	if (!NewTripService.allBerunsDefined) {
+		alert('Не все продукты распределены. Исправьте!');
+		$state.go('setProducts');
+	}
+	else {
+		NewTripService.saveReadyRaskladka(products, members);
+
+		$scope.mainCtrl.edit = true;
+		showCtrl.admin = NewTripService.admin;
+		showCtrl.members = NewTripService.getReady();
+		showCtrl.totalExpenses = 0;
+		showCtrl.members.forEach( function(member) {
+			showCtrl.totalExpenses += member.totalCost;
+		});
+		showCtrl.members.forEach(function(member) {
+		showCtrl.reCalculate(member);
+	});
+	}
+
+
+	showCtrl.checkBalances = function() {
+		var sum = 0;
+		if (!showCtrl.members) return 0;
+		showCtrl.members.forEach(function(member) {
+			sum += member.balance || 0;
+		})
+		return sum;
+	}
+
+	showCtrl.rememberExpenses = function() {
+		NewTripService.rememberExpenses(showCtrl.members);
+	};
+
+	
 
 	showCtrl.saveReady = function() {
 		
@@ -96,9 +113,7 @@ function ShowReadyController( NewTripService, $scope) {
 		NewTripService.saveMemberData(member, index);
 	}
 
-	showCtrl.members.forEach(function(member) {
-		showCtrl.reCalculate(member);
-	});
+	
 }
 
 

@@ -1,8 +1,9 @@
- <span>Название похода:</span> {{showTripCtrl.tripName}}
+<div ng-show='showTripCtrl.notFirstState()'>
+<span>Название похода:</span> {{showTripCtrl.firstInfo.tripName}}
 <br>
-<span>Дата похода:</span> {{showTripCtrl.stringDate}}
+<span>Дата похода:</span> {{showTripCtrl.firstInfo.stringDate}}
 <br>
-<span>Время выезда:</span> {{showTripCtrl.stringTime}}
+<span>Время выезда:</span> {{showTripCtrl.firstInfo.stringTime}}
 <br>
 <span>Сейчас:</span> {{showTripCtrl.nowDate}}
 <br>
@@ -10,7 +11,9 @@
 
 <span ng-if='showTripCtrl.timeOut'><br><a ui-sref="createNew" ng-click='showTripCtrl.refreshTotal()'>Исправьте время и дату выезда!</a></span>
 <br>
-<span>Участники:{{showTripCtrl.tripMembers}}</span>
+<span>Участники:{{showTripCtrl.firstInfo.tripMembers}}</span>
 <br>
-<span>Ночевки:{{showTripCtrl.tripNights}}</span>
+<span>Ночевки:{{showTripCtrl.firstInfo.tripNights}}</span>
 <br>
+<!-- <span ng-if='showTripCtrl.showInfo()'></span> -->
+</div>

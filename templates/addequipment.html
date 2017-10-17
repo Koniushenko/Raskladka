@@ -1,14 +1,11 @@
-<show-trip ></show-trip>
-<a ui-sref="addMembers">Вернуться к личной информации, меню итд</a>
+
+
 <br>
 <button type="button" class="btn btn-primary" ng-disabled="regEquip.$invalid || !equipCtrl.members[0]" ng-click='equipCtrl.addEquip()'>Добавить снарягу</button>
-<input type="submit" value="Дальше" ng-disabled="regEquip.$invalid || equipCtrl.isTimeOut() || equipCtrl.isDoubleEquip()" ng-click='equipCtrl.submit()' 
-ui-sref='setProducts({fromDB: 0})'>
+<!-- <input type="submit" value="Дальше" ng-disabled="regEquip.$invalid || equipCtrl.isTimeOut() || equipCtrl.isDoubleEquip()" ng-click='equipCtrl.submit()' 
+ui-sref='setProducts({fromDB: 0})'> -->
 <br>
-
-
-<!-- <button type="button" ng-disabled="regEquip.$invalid" class="btn btn-primary" ng-click='equipCtrl.submit()'>Сохранить</button> -->
-
+<span ng-if='equipCtrl.formError()'></span>
 
 <form name='regEquip' novalidate>
 <table cellpadding="10" border="1" width="80%" >

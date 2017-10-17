@@ -38,7 +38,7 @@
 		    Не тупи, введи время в формате 00:00!
 		</span>
 		<span ng-if="!startCtrl.checkDateTime(startCtrl.firstInfo.stringDate, startCtrl.firstInfo.stringTime) && 
-		regForm.tripTime.$touched && !regForm.tripTime.$error.timeValid">
+		!regForm.tripTime.$error.timeValid">
 		    Ваш поезд уже ушел, придется менять планы!
 		</span>
 		<br>

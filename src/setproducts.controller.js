@@ -7,7 +7,11 @@ angular.module('Raskladka')
 ProductsController.$inject = ['NewTripService', '$scope'];
 function ProductsController(NewTripService, $scope) {
 	var prodCtrl = this;
-	prodCtrl.admin = NewTripService.admin;
+	
+	prodCtrl.admin = function() {
+		return NewTripService.admin;
+	}
+	
 	NewTripService.checkMembersQuantity();
 	prodCtrl.products = NewTripService.getProducts(); // пересчитываем продукты, если готовую раскладку не сохраняли
 	prodCtrl.members = NewTripService.getMembersInfo();
@@ -18,19 +22,19 @@ function ProductsController(NewTripService, $scope) {
 	prodCtrl.emanKoeff = NewTripService.emanKoeff;
 	prodCtrl.males = NewTripService.males;
 	prodCtrl.females = NewTripService.females;
-	prodCtrl.filePath = NewTripService.filePath;
-	
+	prodCtrl.filePath = NewTripService.filePath;	
 	$scope.mainCtrl.edit = true;
+	NewTripService.productState = true;
 	
 	//удаляем нулевые позиции и считаем общий вес
 	for ( product in prodCtrl.products) {
-		if (prodCtrl.products[product].quant == 0) delete prodCtrl.products[product];
-		else prodCtrl.foodTotalWeight +=prodCtrl.products[product].correctWeight;
+		// if (prodCtrl.products[product].quant == 0) delete prodCtrl.products[product];
+		 prodCtrl.foodTotalWeight +=prodCtrl.products[product].correctWeight;
 	}	
 
 
-	for (product in prodCtrl.trainProducts)
-		if (prodCtrl.trainProducts[product].quant == 0) delete prodCtrl.trainProducts[product];
+	// for (product in prodCtrl.trainProducts)
+	// 	if (prodCtrl.trainProducts[product].quant == 0) delete prodCtrl.trainProducts[product];
 
 
  
@@ -199,12 +203,13 @@ function ProductsController(NewTripService, $scope) {
 	}
 
 	prodCtrl.berunUndefined = function() {
-		for (var product in prodCtrl.products) 
-			if (prodCtrl.products[product].berun === undefined) return true;
-		for (var product in prodCtrl.trainProducts) 
-			if (prodCtrl.trainProducts[product].berun === undefined) return true;
+		NewTripService.berunUndefined(prodCtrl.products, prodCtrl.trainProducts);		
+	}
 
-		return false;
+	prodCtrl.formError = function() {		
+		if ($scope.koefficients.$invalid || prodCtrl.zeroMeasureWeight() || $scope.manualCorrect.$invalid)
+			NewTripService.errorProducts = true;
+		else NewTripService.errorProducts = false;		
 	}
 
 	

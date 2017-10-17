@@ -11,9 +11,10 @@ function EquipmentController(NewTripService, $interval, $scope) {
 	NewTripService.checkMembersQuantity();
 	equipCtrl.admin =NewTripService.admin
 	equipCtrl.members = NewTripService.getMembersInfo();
-	equipCtrl.equipment = NewTripService.getEquipment();   
-	equipCtrl.addEquip = function() {
-	
+	equipCtrl.equipment = NewTripService.getEquipment();  
+	NewTripService.productState = false; 
+
+	equipCtrl.addEquip = function() {	
 		equipCtrl.equipment.push({
 			equipName: '',
 			equipWeight: 0.1,
@@ -25,10 +26,6 @@ function EquipmentController(NewTripService, $interval, $scope) {
 	equipCtrl.removeEquip = function(index) {
 		equipCtrl.equipment.splice(index, 1);
 
-	}
-
-	equipCtrl.isTimeOut = function() {
-		return NewTripService.timeOut;
 	}
 
 	equipCtrl.isDoubleEquip = function() {
@@ -45,16 +42,13 @@ function EquipmentController(NewTripService, $interval, $scope) {
 		};
 		return false	};
 
-	
-
-	equipCtrl.submit = function() {
-
-		for (var i = 0; i < equipCtrl.equipment.length; i++) {
-			if (!equipCtrl.equipment[i].equipName) equipCtrl.equipment[i].equipName = 'Снаряжение ' + i;
-			if (!equipCtrl.equipment[i].equipWeight) equipCtrl.equipment[i].equipWeight = 0.1;
-		};
-		NewTripService.saveEquipment(equipCtrl.equipment);
+	equipCtrl.formError = function() {		
+		if ($scope.regEquip.$invalid || equipCtrl.isDoubleEquip())
+			NewTripService.errorEquip = true;
+		else NewTripService.errorEquip = false;		
 	}
+
+	
 
 	
 	

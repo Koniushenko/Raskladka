@@ -1,7 +1,10 @@
-<div style='float: left'>
-<show-trip ></show-trip>
+<!-- <div style='float: left'>
+
 <a ui-sref="addEquipment" ng-click='prodCtrl.refreshTotal()'>Вернуться к снаряжению, меню итд</a>
-</div>
+</div> -->
+
+<span ng-if='prodCtrl.formError()'></span>
+<span ng-if='prodCtrl.berunUndefined()'></span>
 
 <div style='float: right'>
 <form name='koefficients' novalidate>
@@ -35,14 +38,14 @@ placeholder='1.0' norm-valid max='2' min='0' ng-change='prodCtrl.recalcFoodWeigh
 <br>
 <span ng-if='prodCtrl.females'>Вес на девочку: {{ (prodCtrl.weightPerPerson * prodCtrl.emanKoeff).toFixed(3)}}</span>
 </div>
-<button type="button" class="btn btn-primary" ng-click='prodCtrl.spreadAllWeights()' ng-show='prodCtrl.admin' 
+<button type="button" class="btn btn-primary" ng-click='prodCtrl.spreadAllWeights()' ng-show='prodCtrl.admin()' 
 ng-disabled='prodCtrl.zeroMeasureWeight() || manualCorrect.$invalid || koefficients.$invalid'>
 Распределить вес!</button>
-<button type="button" class="btn btn-primary" ng-show='prodCtrl.admin' ng-click='prodCtrl.resetAllWeights()'>Сбросить распределение!</button>
+<button type="button" class="btn btn-primary" ng-show='prodCtrl.admin()' ng-click='prodCtrl.resetAllWeights()'>Сбросить распределение!</button>
 <!-- <button type="button" class="btn btn-primary" ng-click='prodCtrl.saveAllWeights()' ng-disabled='prodCtrl.berunUndefined()'>
 Сохранить раскладку!</button> -->
-<button type="button" class="btn btn-primary" ng-disabled='prodCtrl.berunUndefined()' ng-click='prodCtrl.saveAllWeights()' 
-ui-sref="showReady">Перейти к расходам</button>
+<!-- <button type="button" class="btn btn-primary" ng-disabled='prodCtrl.berunUndefined()' ng-click='prodCtrl.saveAllWeights()' 
+ui-sref="showReady">Перейти к расходам</button> -->
 
 <form name='manualCorrect' novalidate>
 <table border='1px' cellpadding='10p' width='100%'>

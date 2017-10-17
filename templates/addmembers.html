@@ -1,9 +1,6 @@
-
-<show-trip></show-trip>
-
-<a ui-sref="menuSelect">Вернуться к выбору меню</a>
-<input type="submit" value="Дальше" ng-disabled="memCtrl.isTimeOut() || memCtrl.isDoubleName()" ng-click='memCtrl.submit()' 
-ui-sref='addEquipment'>	
+<div ng-if='memCtrl.formError()'></div>
+<!-- <input type="submit" value="Дальше" ng-disabled="memCtrl.isDoubleName()" ng-click='memCtrl.submit()' 
+ui-sref='addEquipment'>	 -->
 <br>
 
 <form name='regMem' novalidate>
@@ -44,33 +41,5 @@ ui-sref='addEquipment'>
 <br>
 <span ng-if="memCtrl.isDoubleName()">Одинаковые имена нельзя!</span>
 <br>
-<!-- <button type="button" ng-disabled="memCtrl.isDoubleName()" class="btn btn-primary" ng-click='memCtrl.submit()'>Сохранить</button>
-<br> -->
-
-
-
-
-		
-
-
-<!-- <div ng-repeat='member in memCtrl.members'> 
-Учасник {{member.number}}: {{member.name}} <br>
-Телефон {{member.phone}}<br>
-Пол {{member.sex}}<br>
-Мясо {{member.meat}}<br>
-Спирт {{member.alco}}<br>
-
-</div> -->
-<!-- <span>тел: {{memCtrl.membersInfo[0].phone}}</span>
-<span>Sex {{memCtrl.membersInfo[0].sex}}</span>
-<span>Мясо{{memCtrl.membersInfo[0].meat}}</span>
-<span>Спирт{{memCtrl.membersInfo[0].alco}}</span>
-<br>
-<span>Учасник1: {{memCtrl.members[1].name}}</span>
-<span>тел: {{memCtrl.members[1].phone}}</span>
-<span>Sex {{memCtrl.members[1].sex}}</span>
-<span>Мясо {{memCtrl.members[1].meat}}</span>
-<span>Спирт{{memCtrl.members[1].alco}}</span> -->
-
 
 
