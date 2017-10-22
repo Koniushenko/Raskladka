@@ -8,11 +8,11 @@ ui-sref='setProducts({fromDB: 0})'> -->
 <span ng-if='equipCtrl.formError()'></span>
 
 <form name='regEquip' novalidate>
-<table cellpadding="10" border="1" width="80%" >
-<caption> Снаряжение</caption>
+<div class="table-responsive">
+<table class='table table-condensed table-striped'>
 <thead>
 <tr ng-if='equipCtrl.equipment.length'>
-	<th>Какая снаряга</th> <th>Вес</th> <th>Берун</th> <th>Несун</th><th>Action</th>
+	<th style="width: 35%;">Снаряга</th> <th style="width: 25%;">Вес</th> <th style="width: 15%;">Берун</th> <th style="width: 15%;">Несун</th><th style="width: 10%;">Удалить</th>
 </tr>
 </thead>
 <tbody>
@@ -20,7 +20,7 @@ ui-sref='setProducts({fromDB: 0})'> -->
 	
 	<td>
 	<ng-form name='name'>
-		<input type="text" class="form-control"   placeholder = "Снаряжение {{$index}}"	ng-model = 'eq.equipName' maxlength='20' />
+		<input type="text" class="form-control"   placeholder = "Снаряжение {{$index}}"	ng-model = 'eq.equipName' maxlength='25' />
 	</ng-form>
 
 	</td>
@@ -44,12 +44,15 @@ ui-sref='setProducts({fromDB: 0})'> -->
 		</select>	
 	</td>
 	<td>
-	<button type="button" class="btn btn-primary" ng-click='equipCtrl.removeEquip($index)'>Удалить</button>
+		<button type="button" class="btn btn-default btn-sm" ng-click='equipCtrl.removeEquip($index)'>
+          <span class="glyphicon glyphicon-remove"></span>
+        </button>
 	</td>
 
 </tr>
 </tbody>
 </table>
+</div>
 </form>
 
 <!-- <input type="submit" value="Сохранить все введенные данные" ng-disabled="regEquip.$invalid || equipCtrl.isTimeOut()" 

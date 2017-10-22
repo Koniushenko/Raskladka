@@ -1,4 +1,7 @@
-<div ng-show='showTripCtrl.notFirstState()'>
+<div ng-show='showTripCtrl.notFirstState()' class="container">
+<button type='button' class='btn btn-info btn-md' data-toggle="collapse" data-target="#tripInfo">Про поход</button>
+<div id='tripInfo' class='row collapse'>
+<div ng-show='showTripCtrl.notFirstState()' class="well well-sm col-xs-12 col-sm-6">
 <span>Название похода:</span> {{showTripCtrl.firstInfo.tripName}}
 <br>
 <span>Дата похода:</span> {{showTripCtrl.firstInfo.stringDate}}
@@ -8,12 +11,12 @@
 <span>Сейчас:</span> {{showTripCtrl.nowDate}}
 <br>
 <span><b>{{showTripCtrl.timeLeft}}</b></span>
-
 <span ng-if='showTripCtrl.timeOut'><br><a ui-sref="createNew" ng-click='showTripCtrl.refreshTotal()'>Исправьте время и дату выезда!</a></span>
 <br>
 <span>Участники:{{showTripCtrl.firstInfo.tripMembers}}</span>
 <br>
 <span>Ночевки:{{showTripCtrl.firstInfo.tripNights}}</span>
 <br>
-<!-- <span ng-if='showTripCtrl.showInfo()'></span> -->
+</div>
+</div>
 </div>

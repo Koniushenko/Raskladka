@@ -42,6 +42,18 @@ function MenuController(NewTripService, $scope) {
 		)		
 	}
 
+	menuCtrl.resizeMenu = function(menu) {
+		switch (menu.length) {
+			case 1: 
+				return 'col-xs-12';				
+			case 2:
+				return 'col-sm-6'
+			case 3:
+				return 'col-sm-6 col-lg-4'
+			case 4:
+				return 'col-sm-6'
+		}
+	}
 	
 	menuCtrl.arrangeMenu = function() {
 		menuCtrl.tripDays = [];
@@ -88,6 +100,7 @@ function MenuController(NewTripService, $scope) {
 			 toDelete: [false]
 		})
 		menuCtrl.arrangeMenu();
+		menuCtrl.resizeMenu(menu);
 	}
 
 	menuCtrl.deleteMenu = function(menu, number) {
@@ -96,6 +109,7 @@ function MenuController(NewTripService, $scope) {
 			menu[i].number-=1;
 		}
 		menuCtrl.arrangeMenu();
+		menuCtrl.resizeMenu(menu);
 	}
 
 	menuCtrl.isDoubleName = function(menu, number) {

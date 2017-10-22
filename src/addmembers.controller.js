@@ -13,9 +13,13 @@ function MembersController(NewTripService, $interval, $scope) {
 	memCtrl.products = NewTripService.getProductNames();
 	NewTripService.productState = false; 
 
-	memCtrl.eatAll = function(member) {
-		member.noEat = [];
-	}
+	// memCtrl.eatAll = function(member) {
+	// 	member.noEat = [];
+	// }
+
+	memCtrl.noEatReplace = function(member) {
+		return member.noEat.toString().replace(/,/g , ", ");
+    }
 
 	memCtrl.removeRemoved = function(prodNames) {
 		for (var i=0; i < prodNames.length; i++)

@@ -1,232 +1,231 @@
-<div style='float: left'>
-
 <div ng-if='menuCtrl.formError()'></div>
 <div ng-if = 'menuCtrl.newProduct()'></div>
-</div>
+<br>
+<br>
+
+	<button type='button' class='btn btn-primary btn-lg'data-toggle="collapse" data-target="#tripMenu">По дням</button>
+	<div id='tripMenu' class='row collapse'>
+	<show-days-menu days='menuCtrl.tripDays' breakfasts='menuCtrl.tripBreakfasts' lunches='menuCtrl.tripLunches' dinners='menuCtrl.tripDinners'></show-days-menu>
+	</div>
 
 <br>
-<div style='float: right'>
-<show-days-menu days='menuCtrl.tripDays' breakfasts='menuCtrl.tripBreakfasts' lunches='menuCtrl.tripLunches' dinners='menuCtrl.tripDinners'></show-days-menu>
-</div>
 <br>
-<div style='clear:left'>
-<h3> Выбор завтраков</h3>
 <br>
-<button type="button" class="btn btn-primary" ng-click='menuCtrl.addMenu(menuCtrl.breakfasts)' ng-disabled='breakForm.$error.required || menuCtrl.breakfasts.length >=4' title="4 разных завтрака!">Добавить новый завтрак</button>
-<!-- <button type="button" class="btn btn-primary" ng-disabled='breakForm.$invalid || lunchForm.$invalid|| dinnerForm.$invalid || trainForm.$invalid || menuCtrl.isTimeOut()|| menuCtrl.differentMeasures()' ng-click='menuCtrl.save()' ui-sref='addMembers'>ГОТОВО!</button> -->
+<br>
+<button type="button" class="btn btn-primary btn-lg btn-block" data-toggle="collapse" data-target="#breakfasts"> Завтраки</button>
+<br>
+<br>
+<div id="breakfasts" class="collapse container">
+<div class='row'>
+<button type="button" class="btn btn-primary btn-md" ng-click='menuCtrl.addMenu(menuCtrl.breakfasts)' ng-disabled='breakForm.$error.required || menuCtrl.breakfasts.length >=4' title="4 разных завтрака!">Добавить новый завтрак</button>
+<br>
 <br>
 <span ng-if="breakForm.$error.required">Не все заполнено!</span>
 <span ng-if="menuCtrl.differentMeasures()">Один продукт - разные измерения! {{menuCtrl.differentMeasures()}}</span>
-
 <form name='breakForm' novalidate>
-<div ng-repeat='breakfast in menuCtrl.breakfasts' style = 'float: left; padding: 20px'>
-<span> <b>Завтрак {{breakfast.number}}  {{breakfast.times}} раз</b></span>
-<ng-form name='brForm'>
-<button type="button" class="btn btn-primary" ng-click='menuCtrl.deleteMenu(menuCtrl.breakfasts, breakfast.number)' 
-ng-disabled='menuCtrl.breakfasts.length == 1'>Удалить завтрак</button>
-<table border='0' cellspacing="10">
-<thead>
-	<tr>
-		<th>X</th><th>Название</th><th>Муж</th><th>Жен</th><th>Мера</th>
-	</tr>
-</thead>
-<tbody>
-<tr ng-repeat='meal in breakfast.meals track by $index'>
-<!-- <div style='margin: 10px'ng-repeat='meal in breakfast.meals track by $index'> -->
-	<td><input type='checkbox' ng-model = 'breakfast.toDelete[$index]' /></td>
-	<td><input type='text' placeholder='{{meal.name}} новая еда' ng-model='breakfast.meals[$index].name' required maxlength="15" size='10' /></td>
-	<td><input type='number' placeholder='{{meal.maleNorm}}' ng-model='breakfast.meals[$index].maleNorm' 
-	required  norm-valid max='999' min='0' step='1' style='width: 3em'/></td>
-	<td><input type='number' placeholder='{{meal.femaleNorm}}' ng-model='breakfast.meals[$index].femaleNorm' 
-	required norm-valid max='999' min='0' step='1' style='width: 3em' /></td>
-	<td><select name="measure" ng-model='breakfast.meals[$index].measure' required>
-		  <option ng-repeat='measure in menuCtrl.measures' value="{{measure}}">{{measure}}</option>
-	</select></td>
-<!-- </div> -->
-</tr>
-</tbody>
-</table>
-</ng-form>
-<span ng-if="menuCtrl.isDoubleName(menuCtrl.breakfasts, breakfast.number)">Одинаковые названия нельзя!</span>
-<br>
-<div ng-messages="brForm.$error" style="color:red" role="alert">
-    <!-- <div ng-message="required">Все поля обязательные!</div> -->
-     <div ng-message="max">Завтрак{{breakfast.number}}: норма не больше 1000!</div>
-     <div ng-message="number">Что-то не то с нормой...</div>
-    <div ng-message="normValid">Формат нормы выглядит странно</div>
-    <!-- <div ng-message="pattern">Wrong pattern</div> -->   
-    <div ng-message="min">Норма не меньше 0!</div>
-</div>
-<button type="button" ng-disabled='menuCtrl.isDoubleName(menuCtrl.breakfasts, breakfast.number) || breakfast.meals.length > 11'class="btn btn-primary" ng-click='menuCtrl.addMeal(menuCtrl.breakfasts, breakfast.number)' title="Не более 12">Добавить еду</button>
-<button type="button" class="btn btn-primary" ng-click='menuCtrl.deleteMeals(menuCtrl.breakfasts, breakfast.number)'>Удалить отмеченные</button>
+<div ng-repeat='breakfast in menuCtrl.breakfasts'>
+	<div class='{{menuCtrl.resizeMenu(menuCtrl.breakfasts)}}'>
+	<span> <b>Завтрак {{breakfast.number}}  {{breakfast.times}} раз</b></span>
+	<ng-form name='brForm'>
+		<button type="button" class="btn btn-sm btn-danger" ng-click='menuCtrl.deleteMenu(menuCtrl.breakfasts, breakfast.number)' 
+		ng-disabled='menuCtrl.breakfasts.length == 1'>Удалить завтрак</button>		
+		<table class='table table-condensed' style='width: 100%; table-layout: fixed;'>
+		<thead>
+			<tr>
+				<th style="width: 4%">X</th><th style="width: 40%">Название</th><th style="width: 18%" >М</th><th style="width: 18%" >Ж</th><th style="width: 20%" >Мера</th>
+			</tr>
+		</thead>
+		<tbody>
+		<tr ng-repeat='meal in breakfast.meals track by $index'>		
+			<td><input type='checkbox' ng-model = 'breakfast.toDelete[$index]' /></td>
+			<td><input type='text' placeholder='{{meal.name}} новая еда' ng-model='breakfast.meals[$index].name' required maxlength="30" style="width: 100%;"/></td>
+			<td><input type='number' placeholder='{{meal.maleNorm}}' ng-model='breakfast.meals[$index].maleNorm' 
+			required  norm-valid max='999' min='0' step='1' style="width: 100%;"/></td>
+			<td><input type='number' placeholder='{{meal.femaleNorm}}' ng-model='breakfast.meals[$index].femaleNorm' 
+			required norm-valid max='999' min='0' step='1' style="width: 100%;" /></td>
+			<td><select name="measure" ng-model='breakfast.meals[$index].measure' required style="width: 100%;">
+				  <option ng-repeat='measure in menuCtrl.measures' value="{{measure}}">{{measure}}</option>
+			</select></td>		
+		</tr>
+		</tbody>
+		</table>
+		
+	</ng-form>
+	<span ng-if="menuCtrl.isDoubleName(menuCtrl.breakfasts, breakfast.number)">Одинаковые названия нельзя!</span>
+	<br>
+	<div ng-messages="brForm.$error" style="color:red" role="alert">
+	    <div ng-message="max">Завтрак{{breakfast.number}}: норма не больше 1000!</div>
+	    <div ng-message="number">Что-то не то с нормой...</div>
+	    <div ng-message="normValid">Формат нормы выглядит странно</div>	     
+	    <div ng-message="min">Норма не меньше 0!</div>
+	</div>
+	<button type="button" ng-disabled='menuCtrl.isDoubleName(menuCtrl.breakfasts, breakfast.number) || breakfast.meals.length > 14'class="btn btn-sm btn-success" ng-click='menuCtrl.addMeal(menuCtrl.breakfasts, breakfast.number)' title="Не более 15">Добавить еду</button>
+	<button type="button" class="btn btn-sm btn-danger" ng-click='menuCtrl.deleteMeals(menuCtrl.breakfasts, breakfast.number)'>Удалить отмеченные</button>
+	<br>
+	<br>
+	</div>
+	<div ng-show='breakfast.number == 2'class="clearfix visible-sm"></div>
 </div>
 </form>
 </div>
+</div>
 <br>
-
-
-
-<div style="clear: left">
-<h3> Выбор перекусов</h3>
 <br>
-<button type="button" class="btn btn-primary" ng-click='menuCtrl.addMenu(menuCtrl.lunches)' ng-disabled='lunchForm.$error.required || menuCtrl.lunches.length >=4' title="4 разных обеда!">Добавить новый перекус</button>
+<button type="button" class="btn btn-primary btn-lg btn-block" data-toggle="collapse" data-target="#lunches"> Перекусы</button>
 <br>
-
+<br>
+<div id="lunches" class="collapse container">
+<div class='row'>
+<button type="button" class="btn btn-primary btn-md" ng-click='menuCtrl.addMenu(menuCtrl.lunches)' ng-disabled='lunchForm.$error.required || menuCtrl.lunches.length >=4' title="4 разных обеда!">Добавить новый перекус</button>
+<br>
+<br>
 <span ng-if="lunchForm.$error.required">Не все заполнено!</span>
 <form name='lunchForm' novalidate>
-<div ng-repeat='lunch in menuCtrl.lunches' style = 'float: left; padding: 20px'>
-<span> <b>Перекус {{lunch.number}}  {{lunch.times}} раз</b></span>
-<ng-form name='luForm'>
-<button type="button" class="btn btn-primary" ng-click='menuCtrl.deleteMenu(menuCtrl.lunches, lunch.number)' ng-disabled='menuCtrl.lunches.length == 1'>Удалить перекус </button>
-<table>
-<thead>
-	<tr>
-		<th>X</th><th>Название</th><th>Муж</th><th>Жен</th><th>Мера</th>
+<div ng-repeat='lunch in menuCtrl.lunches'>
+	<div class='{{menuCtrl.resizeMenu(menuCtrl.lunches)}}'>
+	<span> <b>Перекус {{lunch.number}}  {{lunch.times}} раз</b></span>
+	<ng-form name='luForm'>
+	<button type="button" class="btn btn-sm btn-danger" ng-click='menuCtrl.deleteMenu(menuCtrl.lunches, lunch.number)' ng-disabled='menuCtrl.lunches.length == 1'>Удалить перекус </button>
+	<table class='table table-condensed' style='width: 100%; table-layout: fixed;'>
+	<thead>
+		<tr>
+			<th style="width: 4%">X</th><th style="width: 40%">Название</th><th style="width: 18%" >М</th><th style="width: 18%" >Ж</th><th style="width: 20%" >Мера</th>
+		</tr>
+	</thead>
+	<tbody>
+	<tr ng-repeat='meal in lunch.meals track by $index'>
+	<td><input type='checkbox' ng-model = 'lunch.toDelete[$index]' /></td>
+		<td><input type='text' placeholder='{{meal.name}} новая еда' ng-model='lunch.meals[$index].name' required maxlength="30" style="width: 100%;"/></td>
+		<td><input type='number' placeholder='{{meal.maleNorm}}' ng-model='lunch.meals[$index].maleNorm' 
+		required  norm-valid max='999' min='0' step='1' style="width: 100%;"/></td>
+		<td><input type='number' placeholder='{{meal.femaleNorm}}' ng-model='lunch.meals[$index].femaleNorm' 
+		required norm-valid max='999' min='0' step='1' style="width: 100%;" /></td>
+		<td><select name="measure" ng-model='lunch.meals[$index].measure' required style="width: 100%;">
+			  <option ng-repeat='measure in menuCtrl.measures' value="{{measure}}">{{measure}}</option>
+		</select></td>
 	</tr>
-</thead>
-<tbody>
-<tr ng-repeat='meal in lunch.meals track by $index'>
-<td><input type='checkbox' ng-model = 'lunch.toDelete[$index]' /></td>
-	<td><input type='text' placeholder='{{meal.name}} новая еда' ng-model='lunch.meals[$index].name' required maxlength="15" size='10' /></td>
-	<td><input type='number' placeholder='{{meal.maleNorm}}' ng-model='lunch.meals[$index].maleNorm' 
-	required  norm-valid max='999' min='0' step='1' style='width: 3em'/></td>
-	<td><input type='number' placeholder='{{meal.femaleNorm}}' ng-model='lunch.meals[$index].femaleNorm' 
-	required norm-valid max='999' min='0' step='1' style='width: 3em' /></td>
-	<td><select name="measure" ng-model='lunch.meals[$index].measure' required>
-		  <option ng-repeat='measure in menuCtrl.measures' value="{{measure}}">{{measure}}</option>
-	</select></td>
-</tr>
-</tbody>
-</table>
-</ng-form>
-<!-- <div style='margin: 10px'ng-repeat='meal in lunch.meals track by $index'> -->
-	<!-- <input type='checkbox' ng-model = 'lunch.toDelete[$index]' />
-	<input type='text' placeholder='{{meal}} новая еда' ng-model='lunch.meals[$index]' required maxlength="20" />	 -->
-<!-- </div> -->
-<span ng-if="menuCtrl.isDoubleName(menuCtrl.lunches, lunch.number)">Одинаковые названия нельзя!</span>
-<br>
-
-<div ng-messages="luForm.$error" style="color:red" role="alert">
-    <!-- <div ng-message="required">Все поля обязательные!</div> -->
-     <div ng-message="max">Перекус{{lunch.number}}: норма не больше 1000!</div>
-     <div ng-message="number">Что-то не то с нормой...</div>
-    <div ng-message="normValid">Формат нормы выглядит странно</div>
-    <!-- <div ng-message="pattern">Wrong pattern</div> -->   
-    <div ng-message="min">Норма не меньше 0!</div>
-</div>
-
-<button type="button" ng-disabled='menuCtrl.isDoubleName(menuCtrl.lunches, lunch.number) || lunch.meals.length > 11'class="btn btn-primary" ng-click='menuCtrl.addMeal(menuCtrl.lunches, lunch.number)' title="Не болле 12">Добавить еду</button>
-<button type="button" class="btn btn-primary" ng-click='menuCtrl.deleteMeals(menuCtrl.lunches, lunch.number)'>Удалить отмеченные</button>
+	</tbody>
+	</table>
+	</ng-form>
+	<span ng-if="menuCtrl.isDoubleName(menuCtrl.lunches, lunch.number)">Одинаковые названия нельзя!</span>
+	<br>
+	<div ng-messages="luForm.$error" style="color:red" role="alert">	    
+	    <div ng-message="max">Перекус{{lunch.number}}: норма не больше 1000!</div>
+	    <div ng-message="number">Что-то не то с нормой...</div>
+	    <div ng-message="normValid">Формат нормы выглядит странно</div>	       
+	    <div ng-message="min">Норма не меньше 0!</div>
+	</div>
+	<button type="button" ng-disabled='menuCtrl.isDoubleName(menuCtrl.lunches, lunch.number) || lunch.meals.length > 11'class="btn btn-sm btn-success" ng-click='menuCtrl.addMeal(menuCtrl.lunches, lunch.number)' title="Не болле 12">Добавить еду</button>
+	<button type="button" class="btn btn-sm btn-danger" ng-click='menuCtrl.deleteMeals(menuCtrl.lunches, lunch.number)'>Удалить отмеченные</button>
+	<br>
+	<br>
+	</div>
+	<div ng-show='lunch.number == 2'class="clearfix visible-sm"></div>
 </div>
 </form>
 </div>
+</div>
 <br>
-
-
-
-<div style="clear: left">
-<h3> Выбор ужинов</h3>
 <br>
-<button type="button" class="btn btn-primary" ng-click='menuCtrl.addMenu(menuCtrl.dinners)' ng-disabled='dinnerForm.$error.required || menuCtrl.dinners.length >=4' title="4 разных ужина!">Добавить новый ужин</button>
+<button type="button" class="btn btn-primary btn-lg btn-block" data-toggle="collapse" data-target="#dinners"> Ужины</button>
 <br>
-
+<br>
+<div id="dinners" class="collapse container">
+<div class='row'>
+<button type="button" class="btn btn-primary btn-md" ng-click='menuCtrl.addMenu(menuCtrl.dinners)' ng-disabled='dinnerForm.$error.required || menuCtrl.dinners.length >=4' title="4 разных ужина!">Добавить новый ужин</button>
+<br>
+<br>
 <span ng-if="dinnerForm.$error.required">Не все заполнено!</span>
 <form name='dinnerForm' novalidate>
-<div ng-repeat='dinner in menuCtrl.dinners' style = 'float: left; padding: 20px'>
-<span> <b>Ужин {{dinner.number}}  {{dinner.times}} раз</b></span>
-<ng-form name='diForm'>
-<button type="button" class="btn btn-primary" ng-click='menuCtrl.deleteMenu(menuCtrl.dinners, dinner.number)' ng-disabled='menuCtrl.dinners.length == 1'>Удалить ужин </button>
-<table>
-<thead>
-	<tr>
-		<th>X</th><th>Название</th><th>Муж</th><th>Жен</th><th>Мера</th>
+<div ng-repeat='dinner in menuCtrl.dinners'>
+	<div class='{{menuCtrl.resizeMenu(menuCtrl.dinners)}}'>
+	<span> <b>Ужин {{dinner.number}}  {{dinner.times}} раз</b></span>
+	<ng-form name='diForm'>
+	<button type="button"  class="btn btn-sm btn-danger" ng-click='menuCtrl.deleteMenu(menuCtrl.dinners, dinner.number)' ng-disabled='menuCtrl.dinners.length == 1'>Удалить ужин </button>
+	<table class='table table-condensed' style='width: 100%; table-layout: fixed;'>
+	<thead>
+		<tr>
+			<th style="width: 4%">X</th><th style="width: 40%">Название</th><th style="width: 18%" >М</th><th style="width: 18%" >Ж</th><th style="width: 20%" >Мера</th>
+		</tr>
+	</thead>
+	<tbody>
+	<tr ng-repeat='meal in dinner.meals track by $index'>
+	<td><input type='checkbox' ng-model = 'dinner.toDelete[$index]' /></td>
+		<td><input type='text' placeholder='{{meal.name}} новая еда' ng-model='dinner.meals[$index].name' required maxlength="30" style="width: 100%;"/></td>
+		<td><input type='number' placeholder='{{meal.maleNorm}}' ng-model='dinner.meals[$index].maleNorm' 
+		required  norm-valid max='999' min='0' step='1' style="width: 100%;"/></td>
+		<td><input type='number' placeholder='{{meal.femaleNorm}}' ng-model='dinner.meals[$index].femaleNorm' 
+		required norm-valid max='999' min='0' step='1' style="width: 100%;" /></td>
+		<td><select name="measure" ng-model='dinner.meals[$index].measure' required style="width: 100%;">
+			  <option ng-repeat='measure in menuCtrl.measures' value="{{measure}}">{{measure}}</option>
+		</select></td>
 	</tr>
-</thead>
-<tbody>
-<tr ng-repeat='meal in dinner.meals track by $index'>
-<td><input type='checkbox' ng-model = 'dinner.toDelete[$index]' /></td>
-	<td><input type='text' placeholder='{{meal.name}} новая еда' ng-model='dinner.meals[$index].name' required maxlength="15" size='10' /></td>
-	<td><input type='number' placeholder='{{meal.maleNorm}}' ng-model='dinner.meals[$index].maleNorm' 
-	required  norm-valid max='999' min='0' step='1' style='width: 3em'/></td>
-	<td><input type='number' placeholder='{{meal.femaleNorm}}' ng-model='dinner.meals[$index].femaleNorm' 
-	required norm-valid max='999' min='0' step='1' style='width: 3em' /></td>
-	<td><select name="measure" ng-model='dinner.meals[$index].measure' required>
-		  <option ng-repeat='measure in menuCtrl.measures' value="{{measure}}">{{measure}}</option>
-	</select></td>
-</tr>
-</tbody>
-</table>
-</ng-form>
-
-<!-- <div style='margin: 10px'ng-repeat='meal in dinner.meals track by $index'>
-	<input type='checkbox' ng-model = 'dinner.toDelete[$index]' />
-	<input type='text' placeholder='{{meal}} новая еда' ng-model='dinner.meals[$index]' required maxlength="20" />	
-</div> -->
-<span ng-if="menuCtrl.isDoubleName(menuCtrl.dinners, dinner.number)">Одинаковые названия нельзя!</span>
-<br>
-<div ng-messages="diForm.$error" style="color:red" role="alert">
-    <!-- <div ng-message="required">Все поля обязательные!</div> -->
-     <div ng-message="max">Ужин{{dinner.number}}: норма не больше 1000!</div>
-     <div ng-message="number">Что-то не то с нормой...</div>
-    <div ng-message="normValid">Формат нормы выглядит странно</div>
-    <!-- <div ng-message="pattern">Wrong pattern</div> -->   
-    <div ng-message="min">Норма не меньше 0!</div>
-</div>
-<button type="button" ng-disabled='menuCtrl.isDoubleName(menuCtrl.dinners, dinner.number) || dinner.meals.length > 11'class="btn btn-primary" ng-click='menuCtrl.addMeal(menuCtrl.dinners, dinner.number)' title="Не более 12">Добавить еду</button>
-<button type="button" class="btn btn-primary" ng-click='menuCtrl.deleteMeals(menuCtrl.dinners, dinner.number)'>Удалить отмеченные</button>
+	</tbody>
+	</table>
+	</ng-form>	
+	<span ng-if="menuCtrl.isDoubleName(menuCtrl.dinners, dinner.number)">Одинаковые названия нельзя!</span>
+	<br>
+	<div ng-messages="diForm.$error" style="color:red" role="alert">	    
+	    <div ng-message="max">Ужин{{dinner.number}}: норма не больше 1000!</div>
+	    <div ng-message="number">Что-то не то с нормой...</div>
+	    <div ng-message="normValid">Формат нормы выглядит странно</div>	    
+	    <div ng-message="min">Норма не меньше 0!</div>
+	</div>
+	<button type="button" ng-disabled='menuCtrl.isDoubleName(menuCtrl.dinners, dinner.number) || dinner.meals.length > 14'class="btn btn-sm btn-success" ng-click='menuCtrl.addMeal(menuCtrl.dinners, dinner.number)' title="Не более 15">Добавить еду</button>
+	<button type="button" class="btn btn-sm btn-danger" ng-click='menuCtrl.deleteMeals(menuCtrl.dinners, dinner.number)'>Удалить отмеченные</button>
+	<br>
+	<br>
+	</div>
+	<div ng-show='dinner.number == 2'class="clearfix visible-sm"></div>
 </div>
 </form>
 </div>
+</div>
 <br>
-
-<div style='clear:left'>
-<h3> Поезд</h3>
 <br>
-
+<button type="button" class="btn btn-primary btn-lg btn-block" data-toggle="collapse" data-target="#train"> Продукты в поезд</button>
+<br>
+<br>
+<div id='train' class="collapse container">
+<div class='row'>
 <span ng-if="trainForm.$error.required">Не все заполнено!</span>
 <span ng-if="trainForm.differentMeasures()">Один продукт - разные измерения! {{menuCtrl.differentMeasures()}}</span>
-
 <form name='trainForm' novalidate>
-<div ng-repeat='train in menuCtrl.train' style = 'float: left; padding: 20px'>
-<ng-form name='trForm'>
-
-<table border='0' cellspacing="10">
-<thead>
-	<tr>
-		<th>X</th><th>Название</th><th>Муж</th><th>Жен</th><th>Мера</th>
+<div ng-repeat='train in menuCtrl.train' class='col-xs-12'>
+	<ng-form name='trForm'>
+	<table class='table table-condensed' style='width: 100%; table-layout: fixed;'>
+	<thead>
+		<tr>
+			<th style="width: 4%">X</th><th style="width: 40%">Название</th><th style="width: 18%" >М</th><th style="width: 18%" >Ж</th><th style="width: 20%" >Мера</th>
+		</tr>
+	</thead>
+	<tbody>
+	<tr ng-repeat='meal in train.meals track by $index'>	
+		<td><input type='checkbox' ng-model = 'train.toDelete[$index]' /></td>
+		<td><input type='text' placeholder='{{meal.name}} новая еда' ng-model='train.meals[$index].name' required maxlength="30" style="width: 100%;"  /></td>
+		<td><input type='number' placeholder='{{meal.maleNorm}}' ng-model='train.meals[$index].maleNorm' 
+		required  norm-valid max='999' min='0' step='1' style="width: 100%;"/></td>
+		<td><input type='number' placeholder='{{meal.femaleNorm}}' ng-model='train.meals[$index].femaleNorm' 
+		required norm-valid max='999' min='0' step='1' style="width: 100%;"/></td>
+		<td><select name="measure" ng-model='train.meals[$index].measure' required style="width: 100%;">
+			  <option ng-repeat='measure in menuCtrl.measures' value="{{measure}}">{{measure}}</option>
+		</select></td>	
 	</tr>
-</thead>
-<tbody>
-<tr ng-repeat='meal in train.meals track by $index'>
-<!-- <div style='margin: 10px'ng-repeat='meal in breakfast.meals track by $index'> -->
-	<td><input type='checkbox' ng-model = 'train.toDelete[$index]' /></td>
-	<td><input type='text' placeholder='{{meal.name}} новая еда' ng-model='train.meals[$index].name' required maxlength="15" size='10' /></td>
-	<td><input type='number' placeholder='{{meal.maleNorm}}' ng-model='train.meals[$index].maleNorm' 
-	required  norm-valid max='999' min='0' step='1' style='width: 3em'/></td>
-	<td><input type='number' placeholder='{{meal.femaleNorm}}' ng-model='train.meals[$index].femaleNorm' 
-	required norm-valid max='999' min='0' step='1' style='width: 3em' /></td>
-	<td><select name="measure" ng-model='train.meals[$index].measure' required>
-		  <option ng-repeat='measure in menuCtrl.measures' value="{{measure}}">{{measure}}</option>
-	</select></td>
-<!-- </div> -->
-</tr>
-</tbody>
-</table>
-</ng-form>
-<span ng-if="menuCtrl.isDoubleName(menuCtrl.train, train.number)">Одинаковые названия нельзя!</span>
-<br>
-<div ng-messages="trForm.$error" style="color:red" role="alert">
-    <!-- <div ng-message="required">Все поля обязательные!</div> -->
-     <div ng-message="max">поезд{{breakfast.number}}: норма не больше 1000!</div>
-     <div ng-message="number">Что-то не то с нормой...</div>
-    <div ng-message="normValid">Формат нормы выглядит странно</div>
-    <!-- <div ng-message="pattern">Wrong pattern</div> -->   
-    <div ng-message="min">Норма не меньше 0!</div>
-</div>
-<button type="button" ng-disabled='menuCtrl.isDoubleName(menuCtrl.train, train.number) || train.meals.length > 11'class="btn btn-primary" ng-click='menuCtrl.addMeal(menuCtrl.train, train.number)' title="Не более 12">Добавить еду</button>
-<button type="button" class="btn btn-primary" ng-click='menuCtrl.deleteMeals(menuCtrl.train, train.number)'>Удалить отмеченные</button>
+	</tbody>
+	</table>
+	</ng-form>
+	<span ng-if="menuCtrl.isDoubleName(menuCtrl.train, train.number)">Одинаковые названия нельзя!</span>
+	<br>
+	<div ng-messages="trForm.$error" style="color:red" role="alert">	    
+	    <div ng-message="max">поезд{{breakfast.number}}: норма не больше 1000!</div>
+	    <div ng-message="number">Что-то не то с нормой...</div>
+	    <div ng-message="normValid">Формат нормы выглядит странно</div>	    
+	    <div ng-message="min">Норма не меньше 0!</div>
+	</div>
+	<button type="button" ng-disabled='menuCtrl.isDoubleName(menuCtrl.train, train.number) || train.meals.length > 14'class="btn btn-sm btn-success" ng-click='menuCtrl.addMeal(menuCtrl.train, train.number)' title="Не более 15">Добавить еду</button>
+	<button type="button" class="btn btn-sm btn-danger"  ng-click='menuCtrl.deleteMeals(menuCtrl.train, train.number)'>Удалить отмеченные</button>
 </div>
 </form>
 </div>
+</div>
 <br>
-<div ng-if='menuCtrl.formError()'></div>

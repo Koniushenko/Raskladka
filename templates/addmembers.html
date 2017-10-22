@@ -4,10 +4,10 @@ ui-sref='addEquipment'>	 -->
 <br>
 
 <form name='regMem' novalidate>
-<table cellpadding="10" border="1" width="80%" >
-<caption> Участники</caption>
+<div class="table-responsive">
+<table class='table table-condensed table-striped'>
 <tr>
-	<th>Имя участника</th> <th>Телефон</th> <th>Пол</th> <th>Ест/пьет все</th> <th>Исключения</th><th>Сохранить!</th>
+	<th style="width: 25%;">Участники</th> <th style="width: 25%;">Телефон</th> <th style="width: 5%;">Пол</th>  <th style="width: 10%;">Не ем/пью:</th><th style="width: 30%;"></th><th style="width: 5%;">Сохранить!</th>
 </tr>
 
 <tr ng-repeat='member in memCtrl.members'> 
@@ -18,24 +18,27 @@ ui-sref='addEquipment'>	 -->
 </form>		
 	<td>
 	<form name='sexSelect'> 
-	  <input type="radio" name="gender" value="male" ng-model = 'member.sex'> Male<br>
-	  <input type="radio" name="gender" value="female" ng-model = 'member.sex'> Female
+	  <input type="radio" name="gender" value="male" ng-model = 'member.sex'> М<br>
+	  <input type="radio" name="gender" value="female" ng-model = 'member.sex'> Ж
 	</form>
 	</td>
   
-	<td><input type="checkbox" name="eat" value="true" ng-model = 'member.eat' ng-change='memCtrl.eatAll(member)'/> 
-	<span ng-if='member.eat'>Ем все!</span>
-	<span ng-if='!member.eat'>Не ем:</span>
-	<select multiple size='3' ng-if='!member.eat' ng-model='member.noEat'>
-		<option ng-repeat='product in memCtrl.products' value="{{product}}" >{{product}}
-			
+	<td>		
+		<select multiple size='3' ng-model='member.noEat'>
+		<option ng-repeat='product in memCtrl.products' value="{{product}}" >{{product}}			
 		</option>
-	</select></td>	
-	<td>{{member.noEat.toString()}}</td>
-	<td> <button type="button" class="btn btn-primary" ng-disabled="regMem.$error.phoneValid || memCtrl.isDoubleName()" 
-	ng-click='memCtrl.saveMemberData(member)'>Записать данные</button></td>	
-</tr>
+		</select>	
+	</td>
+	<td><span>{{ memCtrl.noEatReplace(member) }}</span></td>
+	<td> 
+		<button type="button" class="btn btn-default btn-sm" ng-disabled="regMem.$error.phoneValid || memCtrl.isDoubleName()" 
+		ng-click='memCtrl.saveMemberData(member)'><span class="glyphicon glyphicon-ok"></span> Ok 
+        </button>
+    </td>
+	</tr>
 </table>
+</div>
+
 
 <span ng-if="regMem.$error.phoneValid">Если уж пишешь телефон, то пиши правильно! (0ХХ-ХХХ-ХХ-ХХ)</span>
 <br>
