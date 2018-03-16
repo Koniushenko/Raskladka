@@ -1,0 +1,10 @@
+User-agent: *
+Allow: *.css
+Allow: *.js
+Disallow: /showready
+Disallow: /create/
+Disallow: /addequipment
+Disallow: /menuselect
+Disallow: /setproducts/
+Disallow: /addmembers
+Disallow: /table/

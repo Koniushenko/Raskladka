@@ -1,4 +1,3 @@
-
 (function() {
 angular.module('Raskladka')
 .controller('ProductsController', ProductsController)
@@ -11,7 +10,11 @@ function ProductsController(NewTripService, $scope) {
 	prodCtrl.admin = function() {
 		return NewTripService.admin;
 	}
-	
+	$scope.mainCtrl.seo = {
+		title: 'Продукты в поход|Что взять с собой в поход из еды|Калькулятор продуктов',
+		description: 'Калькулятор продуктов в поход создает список: что взять с собой в поход из еды на всю группу. Вручную можно округлить результаты, немного уменьшить или увеличить вес продуктов. А после -  распределить общий вес поровну: какую еду взять в поход каждому участнику'
+
+	}	
 	NewTripService.checkMembersQuantity();
 	prodCtrl.products = NewTripService.getProducts(); // пересчитываем продукты, если готовую раскладку не сохраняли
 	prodCtrl.members = NewTripService.getMembersInfo();

@@ -10,6 +10,10 @@ function MainController(NewTripService, $scope, $state) {
 	$scope.mainCtrl = this;
 	$scope.mainCtrl.edit = false;
 	$scope.finished = NewTripService.allBerunsDefined = false;
+	$scope.mainCtrl.seo = {
+		title: '',
+		description: ''
+	};
 
 
 	$scope.reset = function() {

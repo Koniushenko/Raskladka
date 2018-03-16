@@ -1,12 +1,16 @@
-<!-- <div style='float: left'>
-
-<a ui-sref="addEquipment" ng-click='prodCtrl.refreshTotal()'>Вернуться к снаряжению, меню итд</a>
-</div> -->
-
 <span ng-if='prodCtrl.formError()'></span>
 <span ng-if='prodCtrl.berunUndefined()'></span>
 
-<div style='float: right'>
+
+<br>
+<div class="container">
+<div class='row'>
+<div class="col-sm-6">
+<button type="button" class="btn btn-primary" ng-click='prodCtrl.spreadAllWeights()' ng-disabled='prodCtrl.zeroMeasureWeight() || manualCorrect.$invalid || koefficients.$invalid'>
+Распределить вес!</button>
+<button type="button" class="btn btn-primary" ng-click='prodCtrl.resetAllWeights()'>Сбросить распределение!</button>
+</div>
+<div class='col-sm-6'>
 <form name='koefficients' novalidate>
 <span>Коэффициент эмансипации:</span><input type='number' ng-model='prodCtrl.emanKoeff' value="0.75" step='0.1' placeholder='0.75' 
 ng-change='prodCtrl.recalcFoodWeight("спирт", 1)' norm-valid max='2'min='0'style='width: 4em'/>
@@ -15,7 +19,7 @@ ng-change='prodCtrl.recalcFoodWeight("спирт", 1)' norm-valid max='2'min='0'
 placeholder='1.0' norm-valid max='2' min='0' ng-change='prodCtrl.recalcFoodWeight("спирт", 1)'/>
 <br>
 </form>
-<table border="1px">
+<table class='table table-condensed table-striped'>
 	<thead>
 		<tr>
 			<th>Участник</th><th>Вес снаряги</th><th>Вес еды</th><th>Общий вес</th><th>Отклонение</th>
@@ -38,17 +42,11 @@ placeholder='1.0' norm-valid max='2' min='0' ng-change='prodCtrl.recalcFoodWeigh
 <br>
 <span ng-if='prodCtrl.females'>Вес на девочку: {{ (prodCtrl.weightPerPerson * prodCtrl.emanKoeff).toFixed(3)}}</span>
 </div>
-<button type="button" class="btn btn-primary" ng-click='prodCtrl.spreadAllWeights()' ng-show='prodCtrl.admin()' 
-ng-disabled='prodCtrl.zeroMeasureWeight() || manualCorrect.$invalid || koefficients.$invalid'>
-Распределить вес!</button>
-<button type="button" class="btn btn-primary" ng-show='prodCtrl.admin()' ng-click='prodCtrl.resetAllWeights()'>Сбросить распределение!</button>
-<!-- <button type="button" class="btn btn-primary" ng-click='prodCtrl.saveAllWeights()' ng-disabled='prodCtrl.berunUndefined()'>
-Сохранить раскладку!</button> -->
-<!-- <button type="button" class="btn btn-primary" ng-disabled='prodCtrl.berunUndefined()' ng-click='prodCtrl.saveAllWeights()' 
-ui-sref="showReady">Перейти к расходам</button> -->
-
+</div>
+</div>
 <form name='manualCorrect' novalidate>
-<table border='1px' cellpadding='10p' width='100%'>
+<table class='table table-condensed table-striped'>
+<caption>В поход</caption>
 	<thead>
 		<tr>
 			<th>Продукт</th><th>Кол-во</th><th>Вес/ед.</th><th>Общий вес</th><th>Округление</th><th>Камент</th><th>Берун</th>
@@ -93,10 +91,11 @@ ui-sref="showReady">Перейти к расходам</button> -->
 </div>
 <span ng-if='prodCtrl.zeroMeasureWeight()'> Вес ед/изм должен быть больше нуля!</span>
 
-<h2>В ПОЕЗД:</h2>
+<br>
 
 <form name='trainSpread' novalidate>
-<table border='1px' cellpadding='10p' width='100%'>
+<table class='table table-condensed table-striped'>
+<caption>В поезд</caption>
 	<thead>
 		<tr>
 			<th>Продукт</th><th>Кол-во</th><th>Камент</th><th>Берун</th>
@@ -114,3 +113,17 @@ ui-sref="showReady">Перейти к расходам</button> -->
 	</tbody>
 </table>
 </form>
+<br>
+<br>
+<h1> Продукты в поход - что взять с собой в поход из еды</h1>
+<h2>Используя калькулятор продуктов, распределяем вес продуктов поровну</h2>
+<p>Продукты в поход и их вес рассчитаны калькулятором на основе данных, введенных на предыдущих вкладках. 
+Подсчитан общий вес продуктов и снаряжения, а также вес, припадающий  на каждого туриста. 
+Можно вручную скорректировать общий вес каждого продукта, в зависимости от его фасовки. 
+Можно поправить коеффициент, определяющий пропорцию грузоподъемности туристки по отношению к грузоподъемности туриста.  
+Можно увеличить, уменьшить количество спирта, в зависимости от ожидаемой погоды. 
+А далее можно распределить продукты вручную, а можно воспользоваться волшебной кнопкой «Распределить!» -
+ и тогда общий вес будет разделен на всех участников похода с минимальным отклонением от нормы. 
+В результате будет понятно, какую еду взять в поход, и кто какие продукты кладет в свой рюкзак</p>
+
+

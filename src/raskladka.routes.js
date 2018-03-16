@@ -3,12 +3,15 @@
 	angular.module('Raskladka')
 	.config(RoutesConfig);
 
-	RoutesConfig.$inject = ['$stateProvider', '$urlRouterProvider'];
-	function RoutesConfig($stateProvider, $urlRouterProvider) {
+	RoutesConfig.$inject = ['$stateProvider', '$urlRouterProvider', '$locationProvider'];
+	function RoutesConfig($stateProvider, $urlRouterProvider, $locationProvider) {
 		$stateProvider
 			.state('home', {
 		    	url: '/',
-		    	templateUrl: 'templates/home.html'
+		    	templateUrl: 'templates/home.html',
+		    	controller: 'HomeController',
+		    	controllerAs: 'homeCtrl'
+
 		    })
 		    .state('loadReady', {
 		    	url: '/load',
@@ -18,7 +21,7 @@
 
 		    })
 		    .state('createNew', {
-		    	url: '/create/{fromDB}',
+		    	url: '/vpohod/{fromDB}',
 		    	templateUrl: 'templates/startcreating.html',
 		    	controller: 'StartCreatingController',
 		    	controllerAs: 'startCtrl',
@@ -31,7 +34,7 @@
 
 		    })
 		    .state( 'addMembers', {
-		    	url: '/addmembers',
+		    	url: '/members',
 		    	templateUrl: 'templates/addmembers.html',
 		    	controller: 'MembersController',
 		    	controllerAs: 'memCtrl',	
@@ -43,7 +46,7 @@
 
 		    })
 		    .state('addEquipment', {
-		    	url: '/addequipment',
+		    	url: '/equipment',
 		    	templateUrl: 'templates/addequipment.html',
 		    	controller: 'EquipmentController',
 		    	controllerAs: 'equipCtrl',
@@ -54,7 +57,7 @@
 		    	}
 		    })
 		    .state('menuSelect', {
-		    	url: '/menuselect',
+		    	url: '/menu-v-pohod',
 		    	templateUrl: 'templates/menuselect.html',
 		    	controller: 'MenuController',
 		    	controllerAs: 'menuCtrl',
@@ -65,7 +68,7 @@
 		    	}
 		    })
 		    .state('setProducts', {
-		    	url: '/setproducts/{fromDB}',
+		    	url: '/products/{fromDB}',
 		    	templateUrl: 'templates/setproducts.html',
 		    	controller: 'ProductsController',
 		    	controllerAs: 'prodCtrl',
@@ -101,6 +104,9 @@
 		    
 		// If user goes to a path that doesn't exist, redirect to public root
   		$urlRouterProvider.otherwise('/');
+
+  		$locationProvider.html5Mode(true);
+  		$locationProvider.hashPrefix('');
 	}
 
 })();

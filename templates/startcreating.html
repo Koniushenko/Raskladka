@@ -32,7 +32,7 @@
         </span>	
 		 <br>
 		
-		<label for="tripTime">Время отправления</label>
+		<label for="tripTime">Время отправления:</label>
 		<input type="text" name="tripTime" ng-model='startCtrl.firstInfo.stringTime' placeholder='00:00' time-valid />
 		<span ng-if="regForm.tripTime.$error.timeValid && regForm.tripTime.$touched">
 		    Не тупи, введи время в формате 00:00!
@@ -43,7 +43,7 @@
 		</span>
 		<br>
 
-		<label for="tripMembers">Количество участников</label>
+		<label for="tripMembers">Количество участников:</label>
 		<input type="number" name="tripMembers" ng-model='startCtrl.firstInfo.tripMembers' placeholder='2' 
 		max='10' min='2' />
 		<span ng-if="(regForm.tripMembers.$error.max || regForm.tripMembers.$error.min) && regForm.tripMembers.$touched">
@@ -51,7 +51,7 @@
 		</span>
 		<br>
 
-		<label for="tripNights">Количество ночевок</label>
+		<label for="tripNights">Количество ночевок:</label>
 		<input type="number" name="tripNights" ng-model='startCtrl.firstInfo.tripNights' placeholder='1' 
 		max='10' min='1' />
 		<span ng-if="(regForm.tripNights.$error.max || regForm.tripNights.$error.min) && regForm.tripNights.$touched">
@@ -74,3 +74,14 @@
 
 </form>
 </fieldset>
+<div>
+<h1>Что взять в поход? Планируем туристический поход</h1>
+<h2>Вводим данные про горный поход (ПВД или походы на несколько дней)</h2>
+
+<p>Для корректного расчета продуктов в поход, на этой странице следует ввести количество ночевок в походе (не считая ночевок в поезде).
+ Программа делает меню-раскладку, начиная с первого ужина перед первой походной ночевкой  и заканчивая последним завтраком в день отправления назад. 
+К примеру, если у вас ПВД с одной ночевкой – то продукты будут посчитаны только на один ужин и на один завтрак. Остальная еда может быть внесена как «продукты в поезд» - 
+то есть то, что будет съедено до прибытия на первую стоянку. </p>
+<p>Также для расчета важно количество туристов. Введите также название похода и пароль. По ним вы всегда сможете открыть свой поход и внести изменения</p>
+</div>
+

@@ -1,4 +1,3 @@
-
 (function() {
 angular.module('Raskladka')
 .controller('MenuController', MenuController)
@@ -9,6 +8,10 @@ function MenuController(NewTripService, $scope) {
 	var menuCtrl = this;
 
 	$scope.mainCtrl.edit = true;
+$scope.mainCtrl.seo = {
+		title: 'Меню в поход|Питание в походе|Расчет продуктов на человека',
+		description: 'Что готовить в походе (на костре или горелке)? Составляем меню в поход. Питание в походе должно быть калорийным и быстрым в приготовлении. Делаем расчет продуктов на человека порционно. Можно пользоваться готовыми шаблонами или добавлять свои блюда. На ваш вкус!'
+	}	
 	menuCtrl.breakfasts = NewTripService.getMenu('breakfast');
 	menuCtrl.lunches = NewTripService.getMenu('lunch');
 	menuCtrl.dinners = NewTripService.getMenu('dinner');

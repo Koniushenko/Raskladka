@@ -80,6 +80,7 @@ try {
     while ($row = $stmt->fetch(PDO::FETCH_ASSOC))  { 
         $row['noEat'] = unserialize($row[noEat]);
         $row['equipWeight'] = (float) $row['equipWeight'];
+        $row['foodWeight'] = (float) $row['foodWeight'];
         $row['number'] = (int) $row['number'];
         $row['eat'] = (bool) $row['eat'];
         $row['addCost'] = (float) $row['addCost'];

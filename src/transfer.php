@@ -122,9 +122,9 @@ else {
 
 	    foreach (json_decode($_POST['membersInfo']) as $index => $member) {
 	    	$noEat = serialize($member->noEat);
-	    	$sql = "INSERT INTO members(number, name, phone, sex, eat, noEat, tripID, equipWeight)
+	    	$sql = "INSERT INTO members(number, name, phone, sex, eat, noEat, tripID, equipWeight, foodWeight)
 	    	VALUES('$member->number', '$member->name', '$member->phone', '$member->sex', '$member->eat', '$noEat', '$last_id', 
-	    	'$member->equipWeight')";
+	    	'$member->equipWeight', '$member->foodWeight')";
 	    	$conn->exec($sql); 	    	
 	    }
 

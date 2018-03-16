@@ -1,0 +1,42 @@
+RewriteEngine On  
+
+RewriteCond %{HTTP_HOST} ^raskladka.com.ua$ [NC]
+RewriteRule ^(.*)$ http://www.raskladka.com.ua/$1 [R=301,L]
+
+RewriteCond %{REQUEST_URI} index.html
+RewriteRule ^(.*)$ http://www.raskladka.com.ua/ [L,R=301]
+
+# If an existing asset or directory is requested go to it as it is
+RewriteCond %{DOCUMENT_ROOT}%{REQUEST_URI} -f [OR]  
+RewriteCond %{DOCUMENT_ROOT}%{REQUEST_URI} -d 
+RewriteRule ^ -  [L]
+
+# If one of the existing pages, do nothing
+RewriteCond %{REQUEST_URI} ^/vpohod/ [OR]
+RewriteCond %{REQUEST_URI} ^/menu-v-pohod$ [OR]
+RewriteCond %{REQUEST_URI} ^/members$ [OR]
+RewriteCond %{REQUEST_URI} ^/equipment$ [OR]
+RewriteCond %{REQUEST_URI} ^/load$ [OR]
+RewriteCond %{REQUEST_URI} ^/products/$
+
+RewriteRule ^ / [L]
+
+#RewriteCond %{REQUEST_URI} addmembers [OR]
+#RewriteCond %{REQUEST_URI} addequipment 
+#RewriteRule ^(.*)$ http://www.raskladka.com.ua/members
+
+# If the requested resource doesn't exist, use root
+#RewriteRule ^(.*)$ http://www.raskladka.com.ua/ [L,R=301]
+
+
+
+
+
+
+
+
+
+
+
+
+

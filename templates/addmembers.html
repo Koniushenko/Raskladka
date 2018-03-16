@@ -1,13 +1,17 @@
+<meta name="fragment" content="!">
 <div ng-if='memCtrl.formError()'></div>
 <!-- <input type="submit" value="Дальше" ng-disabled="memCtrl.isDoubleName()" ng-click='memCtrl.submit()' 
 ui-sref='addEquipment'>	 -->
 <br>
+<h1>Турпоход: список участников. Уточнение продуктов в поход</h1>
+<h2>Вносим личные данные и отмечаем, что не будем есть/пить в походе</h2>
+
 
 <form name='regMem' novalidate>
 <div class="table-responsive">
 <table class='table table-condensed table-striped'>
 <tr>
-	<th style="width: 25%;">Участники</th> <th style="width: 25%;">Телефон</th> <th style="width: 5%;">Пол</th>  <th style="width: 10%;">Не ем/пью:</th><th style="width: 30%;"></th><th style="width: 5%;">Сохранить!</th>
+	<th style="width: 25%;">Участники похода</th> <th style="width: 25%;">Телефон</th> <th style="width: 5%;">Пол</th>  <th style="width: 10%;">Не ем/пью:</th><th style="width: 30%;"></th><th style="width: 5%;">Сохранить!</th>
 </tr>
 
 <tr ng-repeat='member in memCtrl.members'> 
@@ -44,5 +48,11 @@ ui-sref='addEquipment'>	 -->
 <br>
 <span ng-if="memCtrl.isDoubleName()">Одинаковые имена нельзя!</span>
 <br>
+
+<p>На этой странице каждый участник турпохода лично может внести всю информацию о себе (имя, телефон, пол). 
+Важно также отметить в общем списке продуктов в поход те из них, которые турист не планирует употреблять. 
+Например, кто-то не ест мяса (вегетарианец) или не пьет алкоголь (трезвенник).  Выбираем все такие продукты в поход и отмечаем их. 
+Программа автоматически скорректирует общую раскладку и уменьшит общий вес. Естественно, платить свою долю за такие продукты турист-отказник не будет.
+Я иду в поход в горы - без лишнего веса и расходов!</p>
 
 

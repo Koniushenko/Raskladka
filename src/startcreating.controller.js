@@ -6,7 +6,11 @@ StartCreatingController.$inject = ['NewTripService', '$interval', '$scope'];
 function StartCreatingController(NewTripService, $interval, $scope) {
 	var startCtrl = this;
 
-	$scope.mainCtrl.edit = true;	
+	$scope.mainCtrl.edit = true;
+	$scope.mainCtrl.seo = {
+		title: 'Что взять впоход | Туристический поход | Походы ПВД | Горный поход ',
+		description: 'Чтоб узнать, что взять впоход - вводим исходные данные про ваш туристический поход. Маршрут, количество дней и туристов. Даже если это ПВД (поход выходного дня) – ему нужен план. А горный поход – тем более. Хорошие походы начинаются с точного планирования '
+	};
 	NewTripService.productState = false; 	
 
 	startCtrl.checkDateTime = function(strDate, strTime) {

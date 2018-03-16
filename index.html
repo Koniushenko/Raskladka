@@ -1,15 +1,30 @@
 <!DOCTYPE html>
-<html>
+<html ng-app='Raskladka' ng-controller='MainController'>
 <head>
-	<title>Туристическая раскладка продуктов в поход</title>
-	<meta charset='utf8'>
-	<meta name='description' content='Туристическая раскладка продуктов. Расчет продуктов в поход. Точная калькуляция, автоматическое распределение веса между туристами. Программа подсчитывает продукты в поход, пропорционально распределяет вес, подсчитывает расходы. Буквально за 5 минут можно получить на руки полный список необходимого снаряжения и продуктов. Останется только купить и не забыть взять в поход!'>
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-37098380-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-37098380-1');
+</script>
+
+<script> window.prerenderReady = false; </script>
+	<meta name="fragment" content="!">
+	<base href="/">
+       <meta charset='utf8'>
+	<title>{{mainCtrl.seo.title}}</title>	
+	<meta name='description' content='{{mainCtrl.seo.description}}'>
 
 	<!-- Bootstrap connection-->
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+  
 
 	
 <!-- favicon connection -->
@@ -34,8 +49,8 @@
 </head>
 
 
-<body ng-app='Raskladka'>
-<div ng-controller='MainController'>
+<body >
+<div >
 <nav class="navbar navbar-inverse">
   <div class="container-fluid">
     <div class="navbar-header">
@@ -70,12 +85,12 @@
 </nav>
 
 <ul class="nav nav-tabs" ng-show='mainCtrl.edit'>
-  <li ui-sref-active="active"><a ui-sref="createNew">Общая информация</a></li>
-  <li ui-sref-active="active"><a ui-sref="menuSelect">Меню по дням</a></li>
-  <li ui-sref-active="active"><a ui-sref="addMembers">Личная информация</a></li>
-  <li ui-sref-active="active"><a ui-sref="addEquipment">Снаряжение</a></li>
-  <li ui-sref-active="active"><a ui-sref="setProducts">Продукты</a></li>
-  <li ui-sref-active="active"><a class="btn" ng-disabled='!finished' href="" ng-click='goToExpenses()'>Расходы</a></li>
+  <li ui-sref-active="active"><a ui-sref="createNew">План похода</a></li>
+  <li ui-sref-active="active"><a ui-sref="menuSelect">Меню в поход</a></li>
+  <li ui-sref-active="active"><a ui-sref="addMembers">Участники похода</a></li>
+  <li ui-sref-active="active"><a ui-sref="addEquipment">Походное снаряжение</a></li>
+  <li ui-sref-active="active"><a ui-sref="setProducts">Продукты в поход</a></li>
+  <li ui-sref-active="active"><a class="btn" ng-disabled='!finished' href="" ng-click='goToExpenses()'>Список для каждого участника</a></li>
 </ul>
 <br>
 <span ng-if='isFinished()'></span>
@@ -197,7 +212,7 @@
 <br>
 
 
-	<h4><i>Copyright 2017 by Kokon&Co. All rights reserved!!!</i></h1>
+	<h4><i>Copyright 2017 by kon&Co. All rights reserved</i></h1>
 	
 
 </footer>
@@ -228,12 +243,13 @@
 <!-- Controllers -->
     <script src="src/startcreating.controller.js"></script>
     <script src="src/addmembers.controller.js"></script>
-     <script src="src/addequipment.controller.js"></script>
+    <script src="src/addequipment.controller.js"></script>
     <script src="src/raskladka.controller.js"></script>
     <script src="src/menuselect.controller.js"></script>
     <script src="src/setproducts.controller.js"></script>
     <script src="src/showready.controller.js"></script>
     <script src="src/loadready.controller.js"></script>    
+    <script src="src/home.controller.js"></script> 
 
 <!-- Custom Validators -->
     <script src="src/validators.js"></script>

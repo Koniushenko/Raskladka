@@ -2,5 +2,4 @@
 (function() {
 	'use strict';
 	angular.module('Raskladka', ['ui.router', 'ngMessages'])
-
 })();
